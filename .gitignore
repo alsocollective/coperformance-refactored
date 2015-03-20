@@ -1,0 +1,11 @@
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.pyc
+*.psd
+.sass-cache
+node_modules/*
+.DS_Store
+*.ttf
+style.css
