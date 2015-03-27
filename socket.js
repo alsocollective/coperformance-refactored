@@ -20,7 +20,7 @@ var websocket = {
 				});
 
 				socket.on('diagdatain', function(data) {
-					console.log("d in \t" + data.id + "\t" + data.x + "\t" + new Date())
+					console.log("d in \t" + socket.id + "\t" + data.x + "\t" + new Date())
 					data = {
 						"data": data,
 						"id": socket.id
