@@ -146,7 +146,6 @@ copofermance.diagnostics = {
 				return copofermance.diagnostics.settings.xscale(i);
 			})
 			.y(function(d, i) {
-				console.log(d, i)
 				return copofermance.diagnostics.settings.yscale(d[letter]);
 			})
 
