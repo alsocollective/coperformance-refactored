@@ -147,20 +147,23 @@ copofermance.diagnostics = {
 			.y(function(d, i) {
 				return copofermance.diagnostics.settings.yscale(d[letter]);
 			})
-		copofermance.diagnostics.settings.lines[(count * 3) + 1] = d3.svg.line()
-			.x(function(d, i) {
-				return copofermance.diagnostics.settings.xscale(i);
-			})
-			.y(function(d, i) {
-				return copofermance.diagnostics.settings.yscale(d[letter]);
-			})
-		copofermance.diagnostics.settings.lines[(count * 3) + 2] = d3.svg.line()
-			.x(function(d, i) {
-				return copofermance.diagnostics.settings.xscale(i);
-			})
-			.y(function(d, i) {
-				return copofermance.diagnostics.settings.yscale(d[letter]);
-			})
+
+		copofermance.diagnostics.settings.lines[(count * 3) + 1] = null;
+		copofermance.diagnostics.settings.lines[(count * 3) + 2] = null;
+		// copofermance.diagnostics.settings.lines[(count * 3) + 1] = d3.svg.line()
+		// 	.x(function(d, i) {
+		// 		return copofermance.diagnostics.settings.xscale(i);
+		// 	})
+		// 	.y(function(d, i) {
+		// 		return copofermance.diagnostics.settings.yscale(d[letter]);
+		// 	})
+		// copofermance.diagnostics.settings.lines[(count * 3) + 2] = d3.svg.line()
+		// 	.x(function(d, i) {
+		// 		return copofermance.diagnostics.settings.xscale(i);
+		// 	})
+		// 	.y(function(d, i) {
+		// 		return copofermance.diagnostics.settings.yscale(d[letter]);
+		// 	})
 
 		copofermance.diagnostics.settings.paths[count * 3] = copofermance.diagnostics.svg.append("g")
 			.attr("clip-path", "url(#clip)")
@@ -171,23 +174,26 @@ copofermance.diagnostics = {
 			.attr("fill", "none")
 			.attr("stroke", copofermance.diagnostics.colour(count * 3));
 
-		copofermance.diagnostics.settings.paths[(count * 3) + 1] = copofermance.diagnostics.svg.append("g")
-			.attr("clip-path", "url(#clip)")
-			.append("path")
-			.datum(copofermance.diagnostics.settings.data)
-			.attr("class", "line")
-			.attr("d", copofermance.diagnostics.settings.lines[(count * 3) + 1])
-			.attr("fill", "none")
-			.attr("stroke", copofermance.diagnostics.colour((count * 3) + 1));
+		copofermance.diagnostics.settings.paths[(count * 3) + 1] = null;
+		copofermance.diagnostics.settings.paths[(count * 3) + 2] = null;
 
-		copofermance.diagnostics.settings.paths[(count * 3) + 2] = copofermance.diagnostics.svg.append("g")
-			.attr("clip-path", "url(#clip)")
-			.append("path")
-			.datum(copofermance.diagnostics.settings.data)
-			.attr("class", "line")
-			.attr("d", copofermance.diagnostics.settings.lines[(count * 3) + 2])
-			.attr("fill", "none")
-			.attr("stroke", copofermance.diagnostics.colour((count * 3) + 2));
+		// copofermance.diagnostics.settings.paths[(count * 3) + 1] = copofermance.diagnostics.svg.append("g")
+		// 	.attr("clip-path", "url(#clip)")
+		// 	.append("path")
+		// 	.datum(copofermance.diagnostics.settings.data)
+		// 	.attr("class", "line")
+		// 	.attr("d", copofermance.diagnostics.settings.lines[(count * 3) + 1])
+		// 	.attr("fill", "none")
+		// 	.attr("stroke", copofermance.diagnostics.colour((count * 3) + 1));
+
+		// copofermance.diagnostics.settings.paths[(count * 3) + 2] = copofermance.diagnostics.svg.append("g")
+		// 	.attr("clip-path", "url(#clip)")
+		// 	.append("path")
+		// 	.datum(copofermance.diagnostics.settings.data)
+		// 	.attr("class", "line")
+		// 	.attr("d", copofermance.diagnostics.settings.lines[(count * 3) + 2])
+		// 	.attr("fill", "none")
+		// 	.attr("stroke", copofermance.diagnostics.colour((count * 3) + 2));
 
 	},
 	datain: function(msg) {
@@ -215,10 +221,12 @@ copofermance.diagnostics = {
 			//update the graph...
 			copofermance.diagnostics.settings.paths[userNumber * 3]
 				.attr("d", copofermance.diagnostics.settings.lines[userNumber * 3])
-			copofermance.diagnostics.settings.paths[userNumber * 3]
-				.attr("d", copofermance.diagnostics.settings.lines[userNumber * 3])
-			copofermance.diagnostics.settings.paths[userNumber * 3]
-				.attr("d", copofermance.diagnostics.settings.lines[userNumber * 3])
+
+			// copofermance.diagnostics.settings.paths[userNumber * 3]
+			// 	.attr("d", copofermance.diagnostics.settings.lines[userNumber * 3])
+			// copofermance.diagnostics.settings.paths[userNumber * 3]
+			// 	.attr("d", copofermance.diagnostics.settings.lines[userNumber * 3])
+
 			// copofermance.diagnostics.settings.pathy
 			// 	.attr("d", copofermance.diagnostics.settings.liney)
 			// copofermance.diagnostics.settings.pathz
