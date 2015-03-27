@@ -1,15 +1,9 @@
 <html>
 <head>
-	<title>html</title>
+	<title>Test</title>
 </head>
 <body>
-	<h1>
-		html website
-	</h1>
-	<h2>
-		some content
-	</h2>
-
+<h1>page 2</h1>
 <script src="/socket.io/socket.io.js"></script>
 <script>
 	var socket = io.connect('http://localhost:8080');
@@ -17,6 +11,6 @@
 		console.log(data);
 		socket.emit('my other event', { my: 'data' });
 	});
-</script>	
+</script>
 </body>
 </html>

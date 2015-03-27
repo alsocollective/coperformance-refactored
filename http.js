@@ -6,7 +6,7 @@ var http = {
 		http.staticServer = require('serve-static');
 		http.http = require('http');
 
-		http.app = http.connect().use(http.staticServer(__dirname));
+		http.app = http.connect().use(http.staticServer(__dirname + "/http"));
 		http.server = http.http.createServer(http.app);
 	},
 	start: function() {
