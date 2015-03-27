@@ -19,12 +19,8 @@ var websocket = {
 					console.log(data);
 				});
 
-
-
-
-
 				socket.on('diagdatain', function(data) {
-					console.log("diagdata in \t\t" + data)
+					console.log("d in \t" + data.id + "\t" + data.x + "\t" + new Date())
 					data = {
 						"data": data,
 						"id": socket.id
