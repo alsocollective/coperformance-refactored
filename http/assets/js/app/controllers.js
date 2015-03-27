@@ -13,7 +13,7 @@ controllers.home = function(Socket) {
 
 	function onOrientaionEvent(event) {
 		var now = new Date();
-		if (now - previous < 100) {
+		if (now - previous < 500) {
 			return false;
 		}
 		previous = now;
@@ -26,7 +26,7 @@ controllers.home = function(Socket) {
 
 	function onMotionEvent(event) {
 		var now = new Date();
-		if (now - previous < 100) {
+		if (now - previous < 500) {
 			return false;
 		}
 		previous = now;
