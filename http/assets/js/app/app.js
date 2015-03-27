@@ -1,4 +1,4 @@
-var copofermance = angular.module("timeApp", ['ngRoute']) //
+var copofermance = angular.module("copofermance", ['ngRoute', 'ngCookies', 'ngAnimate']) //
 	.config(function($routeProvider) {
 		$routeProvider
 			.when('/', {
