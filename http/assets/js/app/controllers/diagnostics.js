@@ -33,11 +33,11 @@ copofermance.diagnostics = {
 		//used http://bost.ocks.org/mike/path/ for reference
 		//Create the data array... change 60 to the number of points
 		for (var a = 0; a < 120; ++a) {
-			copofermance.diagnostics.settings.data.push({
+			copofermance.diagnostics.settings.data.push([{
 				"x": 0,
 				"y": 0,
 				"z": 0
-			})
+			}])
 		}
 
 		copofermance.diagnostics.settings.diagdata = Socket.on("diagdata", copofermance.diagnostics.datain);
@@ -75,9 +75,9 @@ copofermance.diagnostics = {
 
 		//set up the document
 		var margins = 100;
-		var xCol = "#f00";
-		var yCol = "#0f0";
-		var zCol = "#00f";
+		//var xCol = "#f00";
+		//var yCol = "#0f0";
+		//var zCol = "#00f";
 		var svg = d3.select("#datalocation").append("svg")
 			.attr("width", copofermance.diagnostics.settings.width + margins)
 			.attr("height", copofermance.diagnostics.settings.height + margins)
@@ -146,7 +146,10 @@ copofermance.diagnostics = {
 				return copofermance.diagnostics.settings.xscale(i);
 			})
 			.y(function(d, i) {
-				return copofermance.diagnostics.settings.yscale(d[letter]);
+				if (i == 120) {
+					console.log(d[count], count);
+				}
+				return copofermance.diagnostics.settings.yscale(d[count][letter]);
 			})
 
 		copofermance.diagnostics.settings.lines[(count * 3) + 1] = null;
@@ -213,11 +216,12 @@ copofermance.diagnostics = {
 
 			msg = msg.data;
 			//add your filter here
-			var filter = msg;
+			var past = copofermance.diagnostics.settings.data[copofermance.diagnostics.settings.data.length - 1];
+			past[userNumber] = msg;
 
-
+			console.log(past);
 			//append the new data
-			copofermance.diagnostics.settings.data.push(filter);
+			copofermance.diagnostics.settings.data.push(past);
 
 			//update the graph...
 			copofermance.diagnostics.settings.paths[userNumber * 3]
