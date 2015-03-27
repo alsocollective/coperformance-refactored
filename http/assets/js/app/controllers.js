@@ -5,6 +5,8 @@ controllers.home = function(Socket) {
 	window.addEventListener("devicemotion", onMotionEvent, true);
 	// window.addEventListener("deviceorientaion", onOrientaionEvent, true);
 
+	// setInterval(randomData, 100);
+
 	var socket = Socket;
 	var previous = new Date();
 
@@ -32,6 +34,14 @@ controllers.home = function(Socket) {
 			"x": event.accelerationIncludingGravity.x,
 			"y": event.accelerationIncludingGravity.y,
 			"z": event.accelerationIncludingGravity.z
+		})
+	}
+
+	function randomData() {
+		socket.emit("diagdatain", {
+			"x": Math.random() * 10,
+			"y": Math.random() * 10,
+			"z": Math.random() * 10
 		})
 	}
 }

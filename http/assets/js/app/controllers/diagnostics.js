@@ -9,6 +9,10 @@ copofermance.diagnostics = {
 		height: 700,
 		yscale: null,
 		xscale: null,
+		users: [],
+		lines: [],
+		paths: [],
+
 		linex: null,
 		liney: null,
 		linez: null,
@@ -47,28 +51,27 @@ copofermance.diagnostics = {
 
 
 		// LINES ,these determin which data set we use... x,y,z
-		copofermance.diagnostics.settings.linex = d3.svg.line()
-			.x(function(d, i) {
-				return copofermance.diagnostics.settings.xscale(i);
-			})
-			.y(function(d, i) {
-				return copofermance.diagnostics.settings.yscale(d.x);
-			})
-		copofermance.diagnostics.settings.liney = d3.svg.line()
-			.x(function(d, i) {
-				return copofermance.diagnostics.settings.xscale(i);
-			})
-			.y(function(d, i) {
-				return copofermance.diagnostics.settings.yscale(d.y);
-			})
-		copofermance.diagnostics.settings.linez = d3.svg.line()
-			.x(function(d, i) {
-				return copofermance.diagnostics.settings.xscale(i);
-			})
-			.y(function(d, i) {
-				return copofermance.diagnostics.settings.yscale(d.z);
-			})
-
+		// copofermance.diagnostics.settings.linex = d3.svg.line()
+		// 	.x(function(d, i) {
+		// 		return copofermance.diagnostics.settings.xscale(i);
+		// 	})
+		// 	.y(function(d, i) {
+		// 		return copofermance.diagnostics.settings.yscale(d.x);
+		// 	})
+		// copofermance.diagnostics.settings.liney = d3.svg.line()
+		// 	.x(function(d, i) {
+		// 		return copofermance.diagnostics.settings.xscale(i);
+		// 	})
+		// 	.y(function(d, i) {
+		// 		return copofermance.diagnostics.settings.yscale(d.y);
+		// 	})
+		// copofermance.diagnostics.settings.linez = d3.svg.line()
+		// 	.x(function(d, i) {
+		// 		return copofermance.diagnostics.settings.xscale(i);
+		// 	})
+		// 	.y(function(d, i) {
+		// 		return copofermance.diagnostics.settings.yscale(d.z);
+		// 	})
 
 		//set up the document
 		var margins = 100;
@@ -99,41 +102,76 @@ copofermance.diagnostics = {
 		svg = svg.append("g")
 			.attr("transform", "translate(" + margins + "," + margins + ")");
 
+		copofermance.diagnostics.svg = svg;
+
+		copofermance.diagnostics.colour = d3.scale.linear()
+			.domain([-1, 0, 12])
+			.range(["red", "white", "green"]);
+
 		// actually add the lines now... and their colours are described in here...
-		copofermance.diagnostics.settings.pathx = svg.append("g")
+		// copofermance.diagnostics.settings.pathx = svg.append("g")
+		// 	.attr("clip-path", "url(#clip)")
+		// 	.append("path")
+		// 	.datum(copofermance.diagnostics.settings.data)
+		// 	.attr("class", "line")
+		// 	.attr("d", copofermance.diagnostics.settings.linex)
+		// 	.attr("fill", "none")
+		// 	.attr("stroke", xCol);
+
+		// copofermance.diagnostics.settings.pathy = svg.append("g")
+		// 	.attr("clip-path", "url(#clip)")
+		// 	.append("path")
+		// 	.datum(copofermance.diagnostics.settings.data)
+		// 	.attr("class", "line")
+		// 	.attr("d", copofermance.diagnostics.settings.liney)
+		// 	.attr("fill", "none")
+		// 	.attr("stroke", yCol);
+
+		// copofermance.diagnostics.settings.pathz = svg.append("g")
+		// 	.attr("clip-path", "url(#clip)")
+		// 	.append("path")
+		// 	.datum(copofermance.diagnostics.settings.data)
+		// 	.attr("class", "line")
+		// 	.attr("d", copofermance.diagnostics.settings.linez)
+		// 	.attr("fill", "none")
+		// 	.attr("stroke", zCol);
+	},
+	addLine: function(count) {
+		var letters = ["x", "y", "z"],
+			letter = letters[count % 3];
+
+		copofermance.diagnostics.settings.lines[count] = d3.svg.line()
+			.x(function(d, i) {
+				return copofermance.diagnostics.settings.xscale(i);
+			})
+			.y(function(d, i) {
+				return copofermance.diagnostics.settings.yscale(d[letter]);
+			})
+
+		copofermance.diagnostics.settings.paths[count] = copofermance.diagnostics.svg.append("g")
 			.attr("clip-path", "url(#clip)")
 			.append("path")
 			.datum(copofermance.diagnostics.settings.data)
 			.attr("class", "line")
-			.attr("d", copofermance.diagnostics.settings.linex)
+			.attr("d", copofermance.diagnostics.settings.lines[count])
 			.attr("fill", "none")
-			.attr("stroke", xCol);
+			.attr("stroke", copofermance.diagnostics.colour(count));
 
-
-
-		copofermance.diagnostics.settings.pathy = svg.append("g")
-			.attr("clip-path", "url(#clip)")
-			.append("path")
-			.datum(copofermance.diagnostics.settings.data)
-			.attr("class", "line")
-			.attr("d", copofermance.diagnostics.settings.liney)
-			.attr("fill", "none")
-			.attr("stroke", yCol);
-
-		copofermance.diagnostics.settings.pathz = svg.append("g")
-			.attr("clip-path", "url(#clip)")
-			.append("path")
-			.datum(copofermance.diagnostics.settings.data)
-			.attr("class", "line")
-			.attr("d", copofermance.diagnostics.settings.linez)
-			.attr("fill", "none")
-			.attr("stroke", zCol);
 	},
 	datain: function(msg) {
+		if (copofermance.diagnostics.settings.users.indexOf(msg.id) == -1) {
+			copofermance.diagnostics.settings.users.push(msg.id);
+			console.log("added user");
+			console.log(msg.id)
+			copofermance.diagnostics.addLine(copofermance.diagnostics.settings.users.length);
+		}
+
+
 		if (typeof copofermance.diagnostics.settings.data[0] != typeof msg) {
 			console.log("the data type is bad...")
 		} else {
-			console.log(msg.id);
+			var userNumber = copofermance.diagnostics.settings.users.indexOf(msg.id);
+
 			msg = msg.data;
 			//add your filter here
 			var filter = msg;
@@ -143,13 +181,12 @@ copofermance.diagnostics = {
 			copofermance.diagnostics.settings.data.push(filter);
 
 			//update the graph...
-			copofermance.diagnostics.settings.pathx
-				.attr("d", copofermance.diagnostics.settings.linex)
-			copofermance.diagnostics.settings.pathy
-				.attr("d", copofermance.diagnostics.settings.liney)
-			copofermance.diagnostics.settings.pathz
-				.attr("d", copofermance.diagnostics.settings.linez)
-
+			copofermance.diagnostics.settings.paths[userNumber]
+				.attr("d", copofermance.diagnostics.settings.lines[userNumber])
+			// copofermance.diagnostics.settings.pathy
+			// 	.attr("d", copofermance.diagnostics.settings.liney)
+			// copofermance.diagnostics.settings.pathz
+			// 	.attr("d", copofermance.diagnostics.settings.linez)
 			//remove the old
 			copofermance.diagnostics.settings.data.shift();
 
