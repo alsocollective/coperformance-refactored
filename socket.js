@@ -18,7 +18,21 @@ var websocket = {
 				socket.on('my other event', function(data) {
 					console.log(data);
 				});
-				console.log('a user connected');
+
+
+
+
+
+				socket.on('diagdatain', function(data) {
+					console.log("diagdata in \t\t" + data)
+					data = {
+						"data": data,
+						"id": socket.id
+					}
+					websocket.io.emit('diagdata', data);
+				})
+
+
 			});
 		}
 	},

@@ -22,50 +22,51 @@ copofermance.diagnostics = {
 			console.log("you need to pass socket into the diagnostics init");
 			return false;
 		}
-		timeApp.diagnostics.settings.Socket = Socket;
+		copofermance.diagnostics.settings.Socket = Socket;
 
 
 
 		//used http://bost.ocks.org/mike/path/ for reference
 		//Create the data array... change 60 to the number of points
 		for (var a = 0; a < 120; ++a) {
-			timeApp.diagnostics.settings.data.push({
+			copofermance.diagnostics.settings.data.push({
 				"x": 0,
 				"y": 0,
 				"z": 0
 			})
 		}
 
-		timeApp.diagnostics.settings.diagdata = Socket.on("diagdata", timeApp.diagnostics.datain);
-		timeApp.diagnostics.settings.xscale = d3.scale.linear()
-			.domain([0, timeApp.diagnostics.settings.data.length - 1])
-			.range([0, timeApp.diagnostics.settings.width]);
-		timeApp.diagnostics.settings.yscale = d3.scale.linear()
+		copofermance.diagnostics.settings.diagdata = Socket.on("diagdata", copofermance.diagnostics.datain);
+
+		copofermance.diagnostics.settings.xscale = d3.scale.linear()
+			.domain([0, copofermance.diagnostics.settings.data.length - 1])
+			.range([0, copofermance.diagnostics.settings.width]);
+		copofermance.diagnostics.settings.yscale = d3.scale.linear()
 			.domain([-30, 30])
-			.range([timeApp.diagnostics.settings.height, 0]);
+			.range([copofermance.diagnostics.settings.height, 0]);
 
 
 		// LINES ,these determin which data set we use... x,y,z
-		timeApp.diagnostics.settings.linex = d3.svg.line()
+		copofermance.diagnostics.settings.linex = d3.svg.line()
 			.x(function(d, i) {
-				return timeApp.diagnostics.settings.xscale(i);
+				return copofermance.diagnostics.settings.xscale(i);
 			})
 			.y(function(d, i) {
-				return timeApp.diagnostics.settings.yscale(d.x);
+				return copofermance.diagnostics.settings.yscale(d.x);
 			})
-		timeApp.diagnostics.settings.liney = d3.svg.line()
+		copofermance.diagnostics.settings.liney = d3.svg.line()
 			.x(function(d, i) {
-				return timeApp.diagnostics.settings.xscale(i);
+				return copofermance.diagnostics.settings.xscale(i);
 			})
 			.y(function(d, i) {
-				return timeApp.diagnostics.settings.yscale(d.y);
+				return copofermance.diagnostics.settings.yscale(d.y);
 			})
-		timeApp.diagnostics.settings.linez = d3.svg.line()
+		copofermance.diagnostics.settings.linez = d3.svg.line()
 			.x(function(d, i) {
-				return timeApp.diagnostics.settings.xscale(i);
+				return copofermance.diagnostics.settings.xscale(i);
 			})
 			.y(function(d, i) {
-				return timeApp.diagnostics.settings.yscale(d.z);
+				return copofermance.diagnostics.settings.yscale(d.z);
 			})
 
 
@@ -75,17 +76,17 @@ copofermance.diagnostics = {
 		var yCol = "#0f0";
 		var zCol = "#00f";
 		var svg = d3.select("#datalocation").append("svg")
-			.attr("width", timeApp.diagnostics.settings.width + margins)
-			.attr("height", timeApp.diagnostics.settings.height + margins)
+			.attr("width", copofermance.diagnostics.settings.width + margins)
+			.attr("height", copofermance.diagnostics.settings.height + margins)
 
 
 		// GRID LINES
 		var yAxis = d3.svg.axis()
-			.scale(timeApp.diagnostics.settings.yscale)
+			.scale(copofermance.diagnostics.settings.yscale)
 			.orient("left")
 			.ticks(20);
 		var xAxis = d3.svg.axis()
-			.scale(timeApp.diagnostics.settings.xscale)
+			.scale(copofermance.diagnostics.settings.xscale)
 			.orient("top");
 		svg.append("g")
 			.attr("transform", "translate(" + margins + "," + margins + ")")
@@ -99,62 +100,63 @@ copofermance.diagnostics = {
 			.attr("transform", "translate(" + margins + "," + margins + ")");
 
 		// actually add the lines now... and their colours are described in here...
-		timeApp.diagnostics.settings.pathx = svg.append("g")
+		copofermance.diagnostics.settings.pathx = svg.append("g")
 			.attr("clip-path", "url(#clip)")
 			.append("path")
-			.datum(timeApp.diagnostics.settings.data)
+			.datum(copofermance.diagnostics.settings.data)
 			.attr("class", "line")
-			.attr("d", timeApp.diagnostics.settings.linex)
+			.attr("d", copofermance.diagnostics.settings.linex)
 			.attr("fill", "none")
 			.attr("stroke", xCol);
 
 
 
-		timeApp.diagnostics.settings.pathy = svg.append("g")
+		copofermance.diagnostics.settings.pathy = svg.append("g")
 			.attr("clip-path", "url(#clip)")
 			.append("path")
-			.datum(timeApp.diagnostics.settings.data)
+			.datum(copofermance.diagnostics.settings.data)
 			.attr("class", "line")
-			.attr("d", timeApp.diagnostics.settings.liney)
+			.attr("d", copofermance.diagnostics.settings.liney)
 			.attr("fill", "none")
 			.attr("stroke", yCol);
 
-		timeApp.diagnostics.settings.pathz = svg.append("g")
+		copofermance.diagnostics.settings.pathz = svg.append("g")
 			.attr("clip-path", "url(#clip)")
 			.append("path")
-			.datum(timeApp.diagnostics.settings.data)
+			.datum(copofermance.diagnostics.settings.data)
 			.attr("class", "line")
-			.attr("d", timeApp.diagnostics.settings.linez)
+			.attr("d", copofermance.diagnostics.settings.linez)
 			.attr("fill", "none")
 			.attr("stroke", zCol);
 	},
 	datain: function(msg) {
-		if (typeof timeApp.diagnostics.settings.data[0] != typeof msg) {
+		if (typeof copofermance.diagnostics.settings.data[0] != typeof msg) {
 			console.log("the data type is bad...")
 		} else {
-
+			console.log(msg.id);
+			msg = msg.data;
 			//add your filter here
 			var filter = msg;
 
 
 			//append the new data
-			timeApp.diagnostics.settings.data.push(filter);
+			copofermance.diagnostics.settings.data.push(filter);
 
 			//update the graph...
-			timeApp.diagnostics.settings.pathx
-				.attr("d", timeApp.diagnostics.settings.linex)
-			timeApp.diagnostics.settings.pathy
-				.attr("d", timeApp.diagnostics.settings.liney)
-			timeApp.diagnostics.settings.pathz
-				.attr("d", timeApp.diagnostics.settings.linez)
+			copofermance.diagnostics.settings.pathx
+				.attr("d", copofermance.diagnostics.settings.linex)
+			copofermance.diagnostics.settings.pathy
+				.attr("d", copofermance.diagnostics.settings.liney)
+			copofermance.diagnostics.settings.pathz
+				.attr("d", copofermance.diagnostics.settings.linez)
 
 			//remove the old
-			timeApp.diagnostics.settings.data.shift();
+			copofermance.diagnostics.settings.data.shift();
 
 		}
 	},
 	onexit: function(Socket) {
-		window.removeEventListener("devicemotion", timeApp.diagnostics.settings.tiltEvent, true);
+		window.removeEventListener("devicemotion", copofermance.diagnostics.settings.tiltEvent, true);
 		Socket.onunbind("diagdata");
 	},
 
@@ -174,9 +176,9 @@ copofermance.diagnostics = {
 
 
 	addTiltEventListener: function(Socket) {
-		timeApp.diagnostics.settings.Socket = Socket;
-		timeApp.diagnostics.settings.tiltEvent = function(event) {
-			if (Date.now() - timeApp.diagnostics.settings.lastEvent > 10) {
+		copofermance.diagnostics.settings.Socket = Socket;
+		copofermance.diagnostics.settings.tiltEvent = function(event) {
+			if (Date.now() - copofermance.diagnostics.settings.lastEvent > 10) {
 				var x = (event.accelerationIncludingGravity.x) ? event.accelerationIncludingGravity.x : 0,
 					y = (event.accelerationIncludingGravity.y) ? event.accelerationIncludingGravity.y : 0,
 					z = (event.accelerationIncludingGravity.z) ? event.accelerationIncludingGravity.z : 0;
@@ -185,15 +187,15 @@ copofermance.diagnostics = {
 					"y": y,
 					"z": z,
 				});
-				timeApp.diagnostics.settings.Socket.emit("diagdata", {
+				copofermance.diagnostics.settings.Socket.emit("diagdata", {
 					"x": x,
 					"y": y,
 					"z": z
 				});
-				timeApp.diagnostics.settings.lastEvent = Date.now();
+				copofermance.diagnostics.settings.lastEvent = Date.now();
 			}
 		}
-		window.addEventListener("devicemotion", timeApp.diagnostics.settings.tiltEvent, true);
+		window.addEventListener("devicemotion", copofermance.diagnostics.settings.tiltEvent, true);
 	}
 
 }
