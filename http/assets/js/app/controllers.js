@@ -3,7 +3,7 @@ var controllers = {};
 controllers.home = function(Socket) {
 
 	// window.addEventListener("devicemotion", onMotionEvent, true);
-	window.addEventListener("deviceorientaion", onOrientaionEvent, true);
+	window.addEventListener("deviceorientation", onOrientaionEvent, true);
 
 	// setInterval(randomData, 100);
 
