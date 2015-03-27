@@ -138,7 +138,8 @@ copofermance.diagnostics = {
 	},
 	addLine: function(count) {
 		var letters = ["x", "y", "z"],
-			letter = letters[count % 3];
+			letter = letters[count % 3],
+			count = count - 1;
 
 		copofermance.diagnostics.settings.lines[count * 3] = d3.svg.line()
 			.x(function(d, i) {
