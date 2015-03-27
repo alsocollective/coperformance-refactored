@@ -7,6 +7,10 @@ var websocket = {
 	},
 	views: {
 		init: function() {
+			// websocket.io.set("log level", 4);
+			// websocket.io.set("close timeout", 3000);
+			// websocket.io.set("log level", 4);
+
 			websocket.io.sockets.on('connection', function(socket) {
 				socket.emit('news', {
 					hello: 'world'
