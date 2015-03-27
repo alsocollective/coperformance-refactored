@@ -46,7 +46,7 @@ copofermance.diagnostics = {
 			.domain([0, copofermance.diagnostics.settings.data.length - 1])
 			.range([0, copofermance.diagnostics.settings.width]);
 		copofermance.diagnostics.settings.yscale = d3.scale.linear()
-			.domain([-30, 30])
+			.domain([-360, 360])
 			.range([copofermance.diagnostics.settings.height, 0]);
 
 
