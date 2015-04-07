@@ -2,6 +2,11 @@ var controllers = {};
 
 controllers.home = function(Socket) {
 
+
+}
+
+
+controllers.diagnosticsout = function(Socket) {
 	// window.addEventListener("devicemotion", onMotionEvent, true);
 	window.addEventListener("deviceorientation", onOrientaionEvent, true);
 
