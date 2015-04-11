@@ -5,6 +5,20 @@ controllers.home = function(Socket) {
 
 }
 
+controllers.lobby = function($scope,Socket,User){
+
+	$scope.planet = User.data.planet;	
+	$scope.occupation = User.data.occupation;
+	$scope.setPlanet = function(){
+		console.log($scope.planet)
+		User.data.setPlanet($scope.planet);
+	}
+	$scope.setOccupation = function(){
+		console.log($scope.occupation);
+		User.data.setOccupation($scope.occupation);
+	}
+}
+
 
 controllers.diagnosticsout = function(Socket) {
 	// window.addEventListener("devicemotion", onMotionEvent, true);
