@@ -94,9 +94,9 @@ copofermance.diagnostics = {
 		}
 		//set up the document
 		var margins = 100;
-		var xCol = ["#f00", "#dfc"];
-		var yCol = ["#0f0", "#f0f"];
-		var zCol = ["#00f", "#27c"];
+		var xCol = ["#f00", "#ff8"];
+		var yCol = ["#0f0", "#bbf"];
+		var zCol = ["#00f", "#d70"];
 		var svg = d3.select("#datalocation").append("svg")
 			.attr("width", copofermance.diagnostics.settings.width + margins)
 			.attr("height", copofermance.diagnostics.settings.height + margins)
