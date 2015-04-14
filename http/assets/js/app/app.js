@@ -5,12 +5,14 @@ var copofermance = angular.module("copofermance", ['ngRoute', 'ngCookies', 'ngAn
 				controller: "home",
 				templateUrl: 'pages/home.html'
 			})
-			.when("/lobby",{
+			.when("/lobby", {
 				controller: "lobby",
 				templateUrl: "pages/lobby.html"
-			})			
-
-
+			})
+			.when('/taptest', {
+				controller: "taptest",
+				templateUrl: 'pages/taptest.html'
+			})
 			.when('/input', {
 				controller: "diagnosticsout",
 				templateUrl: 'pages/input.html'

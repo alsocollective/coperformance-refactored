@@ -28,6 +28,16 @@ var websocket = {
 					}
 					websocket.io.emit('diagdata', data);
 				})
+
+				//New Emit for TouchTap
+				socket.on('touchtap', function(data) {
+					//console.log()
+					data = {
+						"data": data,
+						"id": socket.id
+					}
+					websocket.io.emit('touchtap', data);
+				})
 			});
 
 			websocket.io.set('authorization', function(handshakeData, accept) {
