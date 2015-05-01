@@ -32,12 +32,12 @@ controllers.planet = function($scope, Socket, User) {
 	}
 }
 
-controllers.occupation1 = function($scope, Socket, User) {
+controllers.human = function($scope, Socket, User) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 }
 
-controllers.occupation2 = function($scope, Socket, User) {
+controllers.nature = function($scope, Socket, User) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 }

@@ -36,7 +36,8 @@ factories.User = function($cookies, $location, Socket) {
 		init: function() {
 			//check if the user has been to the site before
 			// it returns the appropiate location to be redirected to
-			console.log("redirect to: " + factory.data.checkForCookies());
+			// console.log("redirect to: " + factory.data.checkForCookies());
+			$location.path(factory.data.checkForCookies());
 		},
 		redirect: function() {
 			$location.path("/test")

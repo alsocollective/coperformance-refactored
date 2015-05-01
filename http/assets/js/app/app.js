@@ -16,12 +16,12 @@ var copofermance = angular.module("copofermance", ['ngRoute', 'ngCookies', 'ngAn
 			controller: "planet",
 			templateUrl: "pages/co_planet.html"
 		})
-			.when("/mars/occupation1", {
-				controller: "occupation1",
+			.when("/mars/human", {
+				controller: "human",
 				templateUrl: "pages/co_occupation.html"
 			})
-			.when("/mars/occupation2", {
-				controller: "occupation2",
+			.when("/mars/nature", {
+				controller: "nature",
 				templateUrl: "pages/co_occupation.html"
 			})
 
@@ -31,12 +31,12 @@ var copofermance = angular.module("copofermance", ['ngRoute', 'ngCookies', 'ngAn
 			controller: "planet",
 			templateUrl: "pages/co_planet.html"
 		})
-			.when("/earth/occupation1", {
-				controller: "occupation1",
+			.when("/earth/human", {
+				controller: "human",
 				templateUrl: "pages/co_occupation.html"
 			})
-			.when("/earth/occupation2", {
-				controller: "occupation2",
+			.when("/earth/nature", {
+				controller: "nature",
 				templateUrl: "pages/co_occupation.html"
 			})
 

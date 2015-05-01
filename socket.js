@@ -4,15 +4,20 @@ var websocket = {
 		websocket.io = require('socket.io')(httpserver.server);
 		httpserver.start();
 		websocket.views.init();
+		websocket.activeMatch.init()
 	},
 	views: {
 		init: function() {
 			// websocket.io.set("log level", 4);
 			// websocket.io.set("close timeout", 3000);
 			// websocket.io.set("log level", 4);
-			websocket.io.set('close timeout', 60);
-			websocket.io.set('heartbeat timeout', 60);
+
+			// websocket.io.set('close timeout', 60);
+			// websocket.io.set('heartbeat timeout', 60);
 			websocket.io.sockets.on('connection', function(socket) {
+
+				console.log(socket.handshake.headers.cookie.split("sessionid=")[1].split(";")[0]);
+
 				socket.emit('news', {
 					hello: 'world'
 				});
@@ -39,30 +44,33 @@ var websocket = {
 					websocket.io.emit('touchtap', data);
 				})
 			});
+		}
+	},
 
-			websocket.io.set('authorization', function(handshakeData, accept) {
-				console.log("\n\n\n");
-				console.log(handshakeData.headers.cookie.split(" ")[1].split("=")[1]);
-				console.log("\n\n\n");
-				console.log(accept);
-				console.log("\n\n\n");
+	activeMatch: {
+		list: {
+			"fkwuokxf5fd06l5izptyn5et3bo0xbcv": {
+				"movements": [50, 40, 30, 50, 20, 40]
+			}
+		},
+		interval: null,
+		init: function() {
+			websocket.activeMatch.interval = setInterval(websocket.activeMatch.search, 1000);
+		},
+		search: function() {
+			if (websocket.activeMatch.list === {}) return false;
+			for (var property in websocket.activeMatch.list) {
+				console.log(property, websocket.activeMatch.list[property])
+			}
+		},
+		add: function(cookie) {
 
-				// if (handshakeData.headers.cookie) {
+		},
+		remove: function(cookie) {
 
-				// 	handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
+		},
+		update: function(cookie, value) {
 
-				// 	handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie['express.sid'], 'secret');
-
-				// 	if (handshakeData.cookie['express.sid'] == handshakeData.sessionID) {
-				// 		return accept('Cookie is invalid.', false);
-				// 	}
-
-				// } else {
-				// 	return accept('No cookie transmitted.', false);
-				// }
-
-				// accept(null, true);
-			});
 		}
 	},
 	setTcp: function(tcp) {
