@@ -6,18 +6,43 @@ controllers.home = function(Socket) {
 }
 
 controllers.lobby = function($scope, Socket, User) {
-
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 	$scope.setPlanet = function() {
-		console.log($scope.planet)
+		console.log($scope.planet);
 		User.data.setPlanet($scope.planet);
+	}
+	$scope.clickPlanet = function(planet) {
+		User.data.setPlanet(planet);
 	}
 	$scope.setOccupation = function() {
 		console.log($scope.occupation);
 		User.data.setOccupation($scope.occupation);
 	}
 }
+
+controllers.planet = function($scope, Socket, User) {
+	$scope.planet = User.data.planet;
+	$scope.occupation = User.data.occupation;
+
+	$scope.currentPage = window.location.hash.split("/")[1];
+
+	$scope.clickOccupation = function(occupation) {
+		User.data.setOccupation(occupation);
+	}
+}
+
+controllers.occupation1 = function($scope, Socket, User) {
+	$scope.planet = User.data.planet;
+	$scope.occupation = User.data.occupation;
+}
+
+controllers.occupation2 = function($scope, Socket, User) {
+	$scope.planet = User.data.planet;
+	$scope.occupation = User.data.occupation;
+}
+
+
 
 controllers.taptest = function($scope, Socket, User) {
 

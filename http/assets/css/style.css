@@ -50,7 +50,8 @@ body, html {
   width: 80%;
   max-width: 800px;
   margin: 0 auto;
-  padding-top: 3em; }
+  padding-top: 3em;
+  overflow: visible; }
 
 #datalocation {
   position: absolute;

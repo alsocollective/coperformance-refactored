@@ -7,9 +7,9 @@ var app = {
 		if (socket) {
 			socket.startServer(http);
 		}
-		if (tcp) {
-			tcp.init()
-		}
+		// if (tcp) {
+		// 	tcp.init()
+		// }
 	}
 };
 

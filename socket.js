@@ -42,7 +42,7 @@ var websocket = {
 
 			websocket.io.set('authorization', function(handshakeData, accept) {
 				console.log("\n\n\n");
-				console.log(handshakeData.headers);
+				console.log(handshakeData.headers.cookie.split(" ")[1].split("=")[1]);
 				console.log("\n\n\n");
 				console.log(accept);
 				console.log("\n\n\n");
