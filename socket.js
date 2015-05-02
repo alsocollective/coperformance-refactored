@@ -4,7 +4,6 @@ var websocket = {
 		websocket.io = require('socket.io')(httpserver.server);
 		httpserver.start();
 		websocket.views.init();
-		websocket.activeMatch.init()
 	},
 	views: {
 		init: function() {
@@ -47,32 +46,7 @@ var websocket = {
 		}
 	},
 
-	activeMatch: {
-		list: {
-			"fkwuokxf5fd06l5izptyn5et3bo0xbcv": {
-				"movements": [50, 40, 30, 50, 20, 40]
-			}
-		},
-		interval: null,
-		init: function() {
-			websocket.activeMatch.interval = setInterval(websocket.activeMatch.search, 1000);
-		},
-		search: function() {
-			if (websocket.activeMatch.list === {}) return false;
-			for (var property in websocket.activeMatch.list) {
-				console.log(property, websocket.activeMatch.list[property])
-			}
-		},
-		add: function(cookie) {
 
-		},
-		remove: function(cookie) {
-
-		},
-		update: function(cookie, value) {
-
-		}
-	},
 	setTcp: function(tcp) {
 		websocket.tcp = tcp;
 	}

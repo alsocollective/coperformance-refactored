@@ -1,8 +1,11 @@
 var controllers = {};
 
-controllers.home = function(Socket) {
+controllers.home = function($scope, Socket, User) {
 
-
+	$scope.reset = function() {
+		User.data.setPlanet(null);
+		User.data.setOccupation(null);
+	}
 }
 
 controllers.lobby = function($scope, Socket, User) {
@@ -19,6 +22,7 @@ controllers.lobby = function($scope, Socket, User) {
 		console.log($scope.occupation);
 		User.data.setOccupation($scope.occupation);
 	}
+
 }
 
 controllers.planet = function($scope, Socket, User) {

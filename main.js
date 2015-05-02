@@ -1,6 +1,5 @@
 var app = {
 	init: function() {
-		console.log("starting server:");
 		if (http) {
 			http.init();
 		}
@@ -10,6 +9,9 @@ var app = {
 		// if (tcp) {
 		// 	tcp.init()
 		// }
+		if (game && socket) {
+			game.init(socket);
+		}
 	}
 };
 
@@ -17,5 +19,5 @@ http = require('./http').http;
 tcp = require('./tcp').tcp;
 socket = require('./socket').socket;
 users = require('./users').users
-
+game = require('./game').game
 app.init();
