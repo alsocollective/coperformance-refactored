@@ -6,9 +6,11 @@ var app = {
 		if (socket) {
 			socket.startServer(http);
 		}
-		// if (tcp) {
-		// 	tcp.init()
-		// }
+		if (tcp && socket) {
+			tcp.init();
+			socket.setTcp(tcp);
+
+		}
 		if (game && socket) {
 			game.init(socket);
 		}

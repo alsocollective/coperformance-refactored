@@ -6,6 +6,12 @@ controllers.home = function($scope, Socket, User) {
 		User.data.setPlanet(null);
 		User.data.setOccupation(null);
 	}
+	$scope.tcpPlanet = function() {
+		console.log("yep");
+		Socket.emit('planet', {
+			"planet": "earth"
+		})
+	}
 }
 
 controllers.lobby = function($scope, Socket, User) {

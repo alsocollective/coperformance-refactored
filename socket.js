@@ -24,6 +24,18 @@ var websocket = {
 					console.log(data);
 				});
 
+
+				socket.on('planet', function(data) {
+					console.log("\n\n\n\n")
+					console.log(data);
+
+					websocket.tcp.send.planet("mars", {
+						"x": 0,
+						"y": 50
+					}, 10);
+				})
+
+
 				socket.on('diagdatain', function(data) {
 					console.log("d in \t" + socket.id + "\t" + data.x + "\t" + new Date())
 					data = {

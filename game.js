@@ -14,10 +14,10 @@ var game = {
 			occupationProto = function(name) {
 				var name = name,
 					list = {},
-					this.count = function() {
+					count = function() {
 						return 0;
 					},
-					this.checkForUser = function(cookie) {
+					checkForUser = function(cookie) {
 						if (list[cookie]) {
 							return list[cookie];
 						}
@@ -34,7 +34,7 @@ var game = {
 				},
 				add: function(cookie) {
 
-					allList.list =
+					// allList.list =
 				},
 				count: function() {
 
@@ -45,7 +45,7 @@ var game = {
 				list: {},
 				interval: null,
 				init: function() {
-					activeMatch.interval = setInterval(activeMatch.search, 1000);
+					// activeMatch.interval = setInterval(activeMatch.search, 1000);
 				},
 				search: function() {
 					if (activeMatch.list === {}) return false;
