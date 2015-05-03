@@ -23,8 +23,10 @@ class Planet {
   float locationX, locationY, percent;
   
   Planet(String message){
+    
     String[] components = split(message, ',');
-    type = components[0];
+    println(components[0]);
+    //type = components[0];
   }
 }
 
