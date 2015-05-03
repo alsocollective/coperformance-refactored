@@ -1,4 +1,7 @@
 import controlP5.*;
+import processing.net.*; 
+Client myClient; 
+byte[] byteBuffer = new byte[255];
 
 // ------ ControlP5 ------
 ControlP5 controlP5;
@@ -77,6 +80,8 @@ void setup() {
   
   mars = loadShader("MarsFrag.glsl", "MarsVert.glsl");
   
+  myClient = new Client(this, "127.0.0.1", 5000);
+  
   for (int i = 0; i < craterCount; i++){
     craters[i] = new crater(random(-height*scaleStep/2, height*scaleStep/2), random(-height*scaleStep/2, height*scaleStep/2), random(minCraterRadius, maxCraterRadius), random(minCraterDepth, maxCraterDepth));
   }
@@ -108,6 +113,14 @@ void setup() {
 
 void draw() {
   hint(ENABLE_DEPTH_TEST);
+  
+  //TCP message
+  if (myClient.available() > 0) { 
+    int byteCount = myClient.readBytesUntil('\n', byteBuffer); 
+    String myString = new String(byteBuffer);
+    println(myString);
+    new Planet(myString);
+  }
   
   if (shaderEnabled == true) {
     shader(mars);
