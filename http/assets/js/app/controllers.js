@@ -19,6 +19,7 @@ controllers.lobby = function($scope, Socket, User) {
 	}
 }
 
+//(Rev 1.0 of Tap)
 controllers.taptest = function($scope, Socket, User) {
 
 	window.addEventListener("devicemotion", onMotionEvent, true);
@@ -44,11 +45,11 @@ controllers.taptest = function($scope, Socket, User) {
 		if ((Math.abs(mvgAvg - z)) > 6) {
 			console.log("tap");
 			tapNum++
-			fuel.style.height = tapNum + "%"
+			fuel.style.height = $(document).height() * (tapNum / 100) + "px"
 			console.log(tapNum);
-			percent.innerHTML = tapNum + "%"
+			percent.innerHTML = $(document).height() * (tapNum / 100) + "px"
 
-		} else if (tapNum > 300) {
+		} else if (tapNum > 100) {
 			tapNum = 0;
 		} else {
 
