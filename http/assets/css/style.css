@@ -103,4 +103,21 @@ body, html {
 .hidden {
   text-align: center; }
 
+.planet {
+  width: 200px; }
+
+#earth {
+  background-color: #f0f;
+  border-radius: 100px;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto; }
+
+#mars {
+  background-color: #ff0;
+  border-radius: 100px;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto; }
+
 /*# sourceMappingURL=style.css.map */

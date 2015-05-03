@@ -1,10 +1,24 @@
 <div id="lobby">
 
+	<!-- USE SVG INSTEAD of Border Radius -->
+
 	<div id="openStmt">
 		<h1></h1>
 		<p></p>
-		<h1><a href="#/earth" ng-click="clickPlanet('earth')">earth</a></h1>
-		<h1><a href="#/mars" ng-click="clickPlanet('mars')">mars</a></h1>
+
+		<a href="#/earth" ng-click="clickPlanet('earth')"><div id="earth"></div></a>
+		<h3><a href="#/earth" ng-click="clickPlanet('earth')">Earth</a></h3>
+		<a href="#/mars" ng-click="clickPlanet('mars')"><div id="mars"></div></a>
+		<h3>Mars</h3>
+
+	<!-- 	<a href="#/earth" ng-click="clickPlanet('earth')"><svg class="planet">
+  <circle cx="50" cy="50" r="40" fill="red" />
+</svg></a>
+		<h3>Earth</h3>
+		<a href="#/mars" ng-click="clickPlanet('mars')"><svg class="planet">
+  <circle cx="50" cy="50" r="40" fill="blue" />
+</svg></a>
+		<h3>Mars</h3> -->
 
 	</div>
 	
