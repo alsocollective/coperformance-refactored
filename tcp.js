@@ -3,7 +3,6 @@ var tcp = {
 	tcp: null,
 	socket: null,
 
-
 	init: function() {
 		tcp.lib.StringDecoder = require('string_decoder').StringDecoder;
 		tcp.lib.net = require('net');
@@ -49,17 +48,46 @@ var tcp = {
 
 	send: {
 		beat: function() {
-			if (tcp.socket) {
-				console.log("beat");
-				var str = JSON.stringify({
-					title: 'test',
-					msg: 'did you get it ?'
-				}) + "\n";
-
-				tcp.socket.write(str);
-			} else {
+			if (!tcp.socket) {
 				console.log("no app.socket")
+				return false;
 			}
+			console.log("beat");
+			var str = JSON.stringify({
+				title: 'test',
+				msg: 'did you get it ?'
+			}) + "\n";
+
+			tcp.socket.write(str + "\n");
+		},
+
+		planet: function(planet, location, percent) {
+			if (!tcp.socket) {
+				console.log("no app.socket")
+				return false;
+			}
+			var str = JSON.stringify({
+				type: 'planet',
+				planet: planet,
+				location_x: location.x,
+				location_y: location.y,
+				percent: percent
+			})
+			tcp.socket.write(str + "\n");
+		},
+
+		pairing: function(planet, location) {
+			if (!tcp.socket) {
+				console.log("no app.socket")
+				return false;
+			}
+			var str = JSON.stringify({
+				type: 'paring',
+				planet: planet,
+				location_x: location.x,
+				location_y: location.y
+			})
+			tcp.socket.write(str + "\n");
 		}
 	}
 }

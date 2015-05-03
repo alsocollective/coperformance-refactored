@@ -1,25 +1,60 @@
 var controllers = {};
 
-controllers.home = function(Socket) {
+controllers.home = function($scope, Socket, User) {
 
-
+	$scope.reset = function() {
+		User.data.setPlanet(null);
+		User.data.setOccupation(null);
+	}
+	$scope.tcpPlanet = function() {
+		console.log("yep");
+		Socket.emit('planet', {
+			"planet": "earth"
+		})
+	}
 }
 
 controllers.lobby = function($scope, Socket, User) {
-
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 	$scope.setPlanet = function() {
-		console.log($scope.planet)
+		console.log($scope.planet);
 		User.data.setPlanet($scope.planet);
+	}
+	$scope.clickPlanet = function(planet) {
+		User.data.setPlanet(planet);
 	}
 	$scope.setOccupation = function() {
 		console.log($scope.occupation);
 		User.data.setOccupation($scope.occupation);
 	}
+
 }
 
+controllers.planet = function($scope, Socket, User) {
+	$scope.planet = User.data.planet;
+	$scope.occupation = User.data.occupation;
+
+	$scope.currentPage = window.location.hash.split("/")[1];
+
+	$scope.clickOccupation = function(occupation) {
+		User.data.setOccupation(occupation);
+	}
+}
+
+controllers.human = function($scope, Socket, User) {
+	$scope.planet = User.data.planet;
+	$scope.occupation = User.data.occupation;
+}
+
+controllers.nature = function($scope, Socket, User) {
+	$scope.planet = User.data.planet;
+	$scope.occupation = User.data.occupation;
+}
+
+
 //(Rev 1.0 of Tap)
+
 controllers.taptest = function($scope, Socket, User) {
 
 	window.addEventListener("devicemotion", onMotionEvent, true);
