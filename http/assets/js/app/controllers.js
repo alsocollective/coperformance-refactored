@@ -7,10 +7,17 @@ controllers.home = function($scope, Socket, User) {
 		User.data.setOccupation(null);
 	}
 	$scope.tcpPlanet = function() {
-		console.log("yep");
 		Socket.emit('planet', {
-			"planet": "earth"
-		})
+			"planet": 1
+		});
+	}
+	$scope.tcpPaired = function() {
+		Socket.emit('paired', {
+			"planet": 0
+		});
+	}
+	$scope.tcpSendRandom = function() {
+		Socket.emit('sendRandom', {})
 	}
 }
 

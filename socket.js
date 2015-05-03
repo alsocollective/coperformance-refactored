@@ -29,10 +29,23 @@ var websocket = {
 					console.log("\n\n\n\n")
 					console.log(data);
 
-					websocket.tcp.send.planet("mars", {
+					websocket.tcp.send.planet(0, {
 						"x": 0,
-						"y": 50
+						"y": 1
 					}, 10);
+				})
+
+				socket.on('paired', function(data) {
+					console.log("\n\n");
+					console.log(data);
+					websocket.tcp.send.pairing(0, {
+						"x": 0,
+						"y": 1
+					});
+				})
+
+				socket.on('sendRandom', function() {
+					var data = setInterval(websocket.tcp.send.sendRandom, 100);
 				})
 
 
