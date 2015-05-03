@@ -15,7 +15,9 @@ var websocket = {
 			// websocket.io.set('heartbeat timeout', 60);
 			websocket.io.sockets.on('connection', function(socket) {
 
-				console.log(socket.handshake.headers.cookie.split("sessionid=")[1].split(";")[0]);
+				//console.log(socket.handshake.headers.cookie.split("sessionid=")[1].split(";")[0]);
+
+				console.log(socket.handshake.headers.cookie);
 
 				socket.emit('news', {
 					hello: 'world'
