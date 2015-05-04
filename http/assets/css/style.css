@@ -3,6 +3,10 @@ body, html {
   margin: 0;
   overflow: none; }
 
+h1, h2, h3, h4, h5, h6, a, p {
+  margin: 0;
+  padding: 0; }
+
 @-webkit-keyframes enter {
   0% {
     left: 100%; }
@@ -47,10 +51,19 @@ body, html {
 
 #main_container {
   position: relative;
-  width: 80%;
-  max-width: 800px;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
-  padding-top: 3em;
+  padding-top: 0;
+  overflow: visible;
+  background-color: #eee; }
+
+#nested_container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding-top: 2em;
   overflow: visible; }
 
 #datalocation {
@@ -105,6 +118,20 @@ body, html {
 
 .planet {
   width: 200px; }
+
+.earth {
+  background: -webkit-linear-gradient(#00f, #f0f);
+  color: #fff; }
+
+.mars {
+  background: -webkit-linear-gradient(#d6564a, #d9c055);
+  color: #fff; }
+  .mars #planet {
+    background: -webkit-linear-gradient(#d9c055, #d6564a);
+    border: solid 2px #eee;
+    box-shadow: inset 0px 0px 30px #fff, 0px 0px 50px #fff;
+    border-radius: 100%;
+    margin: 0 auto; }
 
 #earth {
   background-color: #f0f;

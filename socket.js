@@ -49,7 +49,7 @@ var websocket = {
 
 				//New Emit for TouchTap
 				socket.on('touchtap', function(data) {
-					//console.log()
+					console.log(data);
 					data = {
 						"data": data,
 						"id": socket.id
