@@ -69,8 +69,8 @@ var tcp = {
 			var str = JSON.stringify({
 				type: 'planet',
 				planet: planet,
-				location_x: location.x,
-				location_y: location.y,
+				x: location.x,
+				y: location.y,
 				percent: percent
 			})
 			tcp.socket.write(str + "\n");
@@ -84,11 +84,44 @@ var tcp = {
 			var str = JSON.stringify({
 				type: 'paring',
 				planet: planet,
-				location_x: location.x,
-				location_y: location.y
+				x: location.x,
+				y: location.y
 			})
 			tcp.socket.write(str + "\n");
+		},
+
+		sendRandom: function() {
+			if (!tcp.socket) {
+				console.log("no app.socket")
+				return false;
+			}
+			var planet = Math.floor(Math.random() * 2),
+				location = {
+					x: Math.random(),
+					y: Math.random()
+				},
+				percent = Math.random();
+
+			if (Math.random() > 0.5) {
+				var str = JSON.stringify({
+					type: 'paring',
+					planet: planet,
+					x: location.x,
+					y: location.y
+				})
+			} else {
+				var str = JSON.stringify({
+					type: 'planet',
+					planet: planet,
+					x: location.x,
+					y: location.y,
+					percent: percent
+				})
+			}
+			tcp.socket.write(str + "\n");
 		}
+
+
 	}
 }
 

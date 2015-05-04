@@ -13,7 +13,7 @@ void draw() {
     int byteCount = myClient.readBytesUntil('\n', byteBuffer); 
     String myString = new String(byteBuffer);
     println(myString);
-    new Planet(myString);
+    // new Planet(myString);
   }
 }
 
