@@ -52,6 +52,11 @@ controllers.planet = function($scope, Socket, User) {
 controllers.human = function($scope, Socket, User) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
+
+	console.log($(document).width());
+
+	document.getElementById("planet").style.height = $(document).width() - 60;
+	document.getElementById("planet").style.width = $(document).width() - 60;
 }
 
 controllers.nature = function($scope, Socket, User) {
@@ -122,10 +127,12 @@ controllers.taptest = function($scope, Socket, User) {
 
 	//Socket stuff to send to server
 
-	socket.emit("touchtap", {
-		"x": Math.round(e.changedTouches[0].pageX),
-		"y": Math.round(e.changedTouches[0].pageY),
-		"tap": tapNum
+	// console.log(Math.round(e.changedTouches[0].pageX));
+
+	Socket.emit("touchtap", {
+		// "x": Math.round(e.changedTouches[0].pageX),
+		// "y": Math.round(e.changedTouches[0].pageY),
+		// "tap": tapNum
 	});
 }
 
