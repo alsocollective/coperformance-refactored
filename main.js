@@ -13,6 +13,7 @@ var app = {
 		}
 		if (game && socket) {
 			game.init(socket);
+			socket.setGame(game);
 		}
 	}
 };

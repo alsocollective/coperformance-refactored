@@ -76,7 +76,11 @@ var websocket = {
 
 	setTcp: function(tcp) {
 		websocket.tcp = tcp;
+	},
+	setGame: function(game) {
+		websocket.game = game;
 	}
+
 }
 
 exports.socket = websocket;
