@@ -1,6 +1,7 @@
 class crater {
   PVector pos;
   float radius, depth;
+  boolean active;
   
   crater(){
     pos = new PVector(0, 0, 0);

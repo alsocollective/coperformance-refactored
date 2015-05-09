@@ -1,4 +1,4 @@
-class terrain {
+class building {
   grid_vertex[] gridVertex;
   int tileCount;
   
@@ -8,7 +8,7 @@ class terrain {
   int octaves = 4;
   float falloff = 0.5;
   
-  terrain(int n){
+  building(int n){
     tileCount = n;
     gridVertex = new grid_vertex[tileCount*tileCount];
     for(int j=0; j<tileCount; j++){
@@ -40,7 +40,6 @@ class terrain {
   
     for (int j = 0; j < tileCount; j++) {
       noStroke();
-      beginShape(TRIANGLE_STRIP);
       for (int i = 0; i < tileCount; i++) {
         if(j < tileCount - 1){
           if (gridVertex[(j+1) * tileCount + i].noiseTileIndexY == gridVertex[j * tileCount + i].noiseTileIndexY){
@@ -55,10 +54,14 @@ class terrain {
               float amount = map(gridVertex[(j+1) * tileCount + i].pos.z, threshold, noiseYMax, 0, 1);
               interColor = lerpColor(midColor, topColor, amount);
             }
-            fill(interColor);
-            //fill(200 * (1- gridVertex[j * tileCount + i].digScale / digDepth,50,0);
-            vertex (gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale - gridVertex[j * tileCount + i].digScale+ curve_amp * sin(PI*((float)i/(float)tileCount)));   
-            vertex (gridVertex[(j+1) * tileCount + i].pos.x, gridVertex[(j+1) * tileCount + i].pos.y, gridVertex[(j+1) * tileCount + i].pos.z*zScale - gridVertex[(j+1) * tileCount + i].digScale + curve_amp * sin(PI*((float)i/(float)tileCount)));
+            fill(255);
+            pushMatrix();
+            translate(gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale);
+            noStroke();
+            //fill(0,buildingOpacity);
+            //fill(255,25);
+            box(scaleStep*5,scaleStep*5,gridVertex[j * tileCount + i].pos.z*zScale*2);
+            popMatrix();
           }
         }
         else if (j == tileCount - 1){

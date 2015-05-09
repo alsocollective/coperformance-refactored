@@ -59,4 +59,14 @@ class grid_vertex{
       }
     }
   }
+  
+  void draw(){
+    //for debugging purposes
+    pushStyle();
+      strokeWeight(1);
+      stroke(255);
+      point (pos.x, pos.y, pos.z*zScale);   
+      point (pos.x, pos.y, pos.z);   
+    popStyle();
+  }
 }

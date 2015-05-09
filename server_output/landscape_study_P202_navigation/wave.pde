@@ -1,15 +1,27 @@
-class terrain {
+class wave {
   grid_vertex[] gridVertex;
   int tileCount;
+  //float seaLevel;
   
   // ------ noise ------
   int noiseXRange = 10;
   int noiseRange = 10;
   int octaves = 4;
   float falloff = 0.5;
+  float waveNoiseSeed;
+  float tideSpeed = 0.01;
   
-  terrain(int n){
+  boolean waveOn;
+  color midColor, topColor, bottomColor;
+  
+  wave(int n){
     tileCount = n;
+    waveOn = true;
+    
+    topColor = color(255);
+  midColor = color(200);
+  bottomColor = color(155);
+    
     gridVertex = new grid_vertex[tileCount*tileCount];
     for(int j=0; j<tileCount; j++){
       for(int i=0; i<tileCount; i++){
@@ -23,11 +35,13 @@ class terrain {
   
   void update() {
     
+    if (waveOn) waveNoiseSeed -= tideSpeed;
+    
     for (int j = 0; j < tileCount; j++) {
       for (int i = 0; i < tileCount; i++) {
         gridVertex[j * tileCount + i].update();
-        float noiseX = map(i, 0, tileCount, 0, noiseRange);
-        float noiseY = map(j, 0, tileCount, 0 + noiseRange * gridVertex[j * tileCount + i].noiseTileIndexY, noiseRange + noiseRange * gridVertex[j * tileCount + i].noiseTileIndexY);
+        float noiseX = map(i, 0, tileCount, 0, noiseRange) + waveNoiseSeed;
+        float noiseY = map(j, 0, tileCount, 0 + noiseRange * gridVertex[j * tileCount + i].noiseTileIndexY, noiseRange + noiseRange * gridVertex[j * tileCount + i].noiseTileIndexY) + waveNoiseSeed;
         gridVertex[j * tileCount + i].pos.z = noise(noiseX, noiseY);
         //gridVertex[j * tileCount + i].draw();
       }
@@ -55,20 +69,21 @@ class terrain {
               float amount = map(gridVertex[(j+1) * tileCount + i].pos.z, threshold, noiseYMax, 0, 1);
               interColor = lerpColor(midColor, topColor, amount);
             }
-            fill(interColor);
+            fill(interColor, waveAlpha);
             //fill(200 * (1- gridVertex[j * tileCount + i].digScale / digDepth,50,0);
-            vertex (gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale - gridVertex[j * tileCount + i].digScale+ curve_amp * sin(PI*((float)i/(float)tileCount)));   
-            vertex (gridVertex[(j+1) * tileCount + i].pos.x, gridVertex[(j+1) * tileCount + i].pos.y, gridVertex[(j+1) * tileCount + i].pos.z*zScale - gridVertex[(j+1) * tileCount + i].digScale + curve_amp * sin(PI*((float)i/(float)tileCount)));
+            vertex (gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale + seaLevel + curve_amp * sin(PI*((float)i/(float)tileCount)));   
+            vertex (gridVertex[(j+1) * tileCount + i].pos.x, gridVertex[(j+1) * tileCount + i].pos.y, gridVertex[(j+1) * tileCount + i].pos.z*zScale + seaLevel + curve_amp * sin(PI*((float)i/(float)tileCount)));
           }
         }
         else if (j == tileCount - 1){
           if (gridVertex[j * tileCount + i].noiseTileIndexY != gridVertex[i].noiseTileIndexY){
-            vertex(gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale + curve_amp * sin(PI*((float)i/(float)tileCount)));
-            vertex(gridVertex[i].pos.x, gridVertex[i].pos.y, gridVertex[i].pos.z*zScale+ curve_amp * sin(PI*((float)i/(float)tileCount)));
+            vertex(gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale + seaLevel + curve_amp * sin(PI*((float)i/(float)tileCount)));
+            vertex(gridVertex[i].pos.x, gridVertex[i].pos.y, gridVertex[i].pos.z*zScale + seaLevel + curve_amp * sin(PI*((float)i/(float)tileCount)));
           }
         }
       }
       endShape();
     }
+    
   }
 }
