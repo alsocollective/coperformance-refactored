@@ -15,16 +15,23 @@ var websocket = {
 			// websocket.io.set('heartbeat timeout', 60);
 			websocket.io.sockets.on('connection', function(socket) {
 
-				//console.log(socket.handshake.headers.cookie.split("sessionid=")[1].split(";")[0]);
 
-				console.log(socket.handshake.headers.cookie);
-
-				socket.emit('news', {
-					hello: 'world'
-				});
-				socket.on('my other event', function(data) {
-					console.log(data);
-				});
+				// we test to see if the user has a cookie,
+				// if not we give him an id
+				// if they do we take their id and set it as our user  id
+				var re = new RegExp("id=");
+				if (!re.test(socket.handshake.headers.cookie)) {
+					socket.emit('setup', {
+						cookie: socket.id
+					});
+				} else {
+					// we have an id so we set it to the socket id
+					var id = socket.handshake.headers.cookie.match(/id=(.*);/);
+					if (id === null) {
+						id = socket.handshake.headers.cookie.match(/id=(.*)/);
+					}
+					socket.id = id[1];
+				}
 
 
 				socket.on('planet', function(data) {
@@ -49,7 +56,6 @@ var websocket = {
 				socket.on('sendRandom', function() {
 					var data = setInterval(websocket.tcp.send.sendRandom, 100);
 				})
-
 
 				socket.on('diagdatain', function(data) {
 					console.log("d in \t" + socket.id + "\t" + data.x + "\t" + new Date())

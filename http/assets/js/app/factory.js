@@ -37,6 +37,9 @@ factories.User = function($cookies, $location, Socket) {
 			//check if the user has been to the site before
 			// it returns the appropiate location to be redirected to
 			// console.log("redirect to: " + factory.data.checkForCookies());
+			Socket.on("setup", function(msg) {
+				$cookies.id = msg.cookie;
+			})
 			$location.path(factory.data.checkForCookies());
 		},
 		redirect: function() {
@@ -49,7 +52,7 @@ factories.User = function($cookies, $location, Socket) {
 				factory.data.planet = $cookies.planet;
 				factory.data.occupation = $cookies.occupation;
 				if (!factory.data.planet) {
-					return "/lobdy";
+					return "/lobby";
 				} else {
 					if (factory.data.occupation) {
 						return "/" + factory.data.planet + "/" + factory.data.occupation;
