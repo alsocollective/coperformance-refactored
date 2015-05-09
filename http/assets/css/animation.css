@@ -19,8 +19,13 @@
   0% {
     left: 0%; } }
 .ng-enter {
-  -webkit-animation: enter 0.8s ease-out;
-  animation: enter 0.8s ease-out; }
+  -webkit-animation: enter 1.0s ease-out;
+  animation: enter 1.0s ease-out;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  /* Other transform properties here */ }
 
 .ng-leave {
   bottom: 0%;

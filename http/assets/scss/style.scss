@@ -94,6 +94,7 @@ h1,h2,h3,h4,h5,h6,a,p {
 	// display: none;
 }
 
+
 //Planets
 
 .planet {
@@ -112,12 +113,27 @@ h1,h2,h3,h4,h5,h6,a,p {
 
 	#planet {
 		background: -webkit-linear-gradient(#d9c055, #d6564a);
-		border: solid 2px #eee;
+		border: solid 1px #eee;
 		box-shadow: inset 0px 0px 30px #fff, 0px 0px 50px #fff;
 		border-radius: 100%;
 		margin: 0 auto;
 	}
 }
+
+.extract {
+	#planet {
+		background: -webkit-linear-gradient(#000, #333);
+		border: solid 1px #eee;
+		box-shadow: inset 0px 0px 30px #fff, 0px 0px 50px #fff;
+		border-radius: 100%;
+		margin: 0 auto;
+
+		//bottom
+		position: absolute;
+		bottom: 0px;
+	}
+}
+
 
 #earth {
 	background-color: #f0f;
