@@ -58,10 +58,20 @@ controllers.human = function($scope, Socket, User) {
 
 	console.log($(document).width());
 
-	document.getElementById("planet").style.height = $(document).width() - 60;
-	document.getElementById("planet").style.width = $(document).width() - 60;
+	//Only need to define this once. I should get it earlier maybe?
+	document.getElementById("planet").style.height = $(document).width() - 120;
+	document.getElementById("planet").style.width = $(document).width() - 120;
 
-	$("#ready").click(function(){
+	document.getElementById("planet2").style.height = $(document).width() - 120;
+	document.getElementById("planet2").style.width = $(document).width() - 120;
+
+	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
+	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;
+
+	// $(".planet").style.height = $(document).width() - 120;
+	// $(".planet").style.width = $(document).width() - 120;
+
+	$("#ready").click(function() {
 		console.log("this");
 
 		controllers.extract();
@@ -70,8 +80,12 @@ controllers.human = function($scope, Socket, User) {
 }
 
 controllers.extract = function($scope, Socket, User) {
-	
+
 	console.log("Extract Mode");
+
+
+
+	$("#nested_container").switchClass("intro", "extract", 1000, "easeInOutQuad");
 
 	window.addEventListener("devicemotion", onMotionEvent, true);
 
@@ -104,12 +118,15 @@ controllers.extract = function($scope, Socket, User) {
 			tapNum = 0;
 			removeEvent();
 			controllers.pair();
-			
-
 		} else {
 
 		}
 	}
+
+	$("#pair").click(function() {
+		removeEvent();
+		controllers.pair();
+	});
 
 	function removeEvent() {
 		fuel.style.height = 0;
@@ -159,11 +176,23 @@ controllers.pair = function($scope, Socket, User) {
 	//window.removeEventListener("devicemotion", );
 
 
-	console.log("pair mode");
+	console.log("Pairing Mode");
+
+	$("#nested_container").switchClass("extract", "pairing", 1000, "easeInOutQuad");
 
 	var tmpBack = document.getElementById("nested_container");
 
-	tmpBack.style.background = "#fff";
+	tmpBack.style.background = "#ff0";
+
+	$("#pairnow").click(function() {
+
+		$("#nested_container").switchClass("pairing", "extract", 1000, "easeInOutQuad");
+		controllers.extract();
+
+		console.log("Time to Pair Andrei");
+		// removeEvent();
+		// controllers.pair();
+	});
 }
 
 
