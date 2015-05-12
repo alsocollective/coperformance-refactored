@@ -85,7 +85,7 @@ controllers.extract = function($scope, Socket, User) {
 
 
 
-	$("#nested_container").switchClass("intro", "extract", 1000, "easeInOutQuad");
+	$("#nested_container").switchClass("intro", "extract");
 
 	window.addEventListener("devicemotion", onMotionEvent, true);
 
@@ -178,15 +178,16 @@ controllers.pair = function($scope, Socket, User) {
 
 	console.log("Pairing Mode");
 
-	$("#nested_container").switchClass("extract", "pairing", 1000, "easeInOutQuad");
+	//$("#nested_container").switchClass("extract", "pairing", 1000, "easeInOutQuad");
+	$("#nested_container").switchClass("extract", "pairing");
 
 	var tmpBack = document.getElementById("nested_container");
 
-	tmpBack.style.background = "#ff0";
+	//tmpBack.style.background = "#ff0";
 
 	$("#pairnow").click(function() {
 
-		$("#nested_container").switchClass("pairing", "extract", 1000, "easeInOutQuad");
+		$("#nested_container").switchClass("pairing", "extract");
 		controllers.extract();
 
 		console.log("Time to Pair Andrei");

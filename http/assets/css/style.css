@@ -2,7 +2,8 @@ body, html {
   padding: 0;
   margin: 0;
   overflow: none;
-  background-color: #333; }
+  background-color: #333;
+  font-family: 'Inconsolata'; }
 
 h1, h2, h3, h4, h5, h6, a, p {
   margin: 0;
@@ -179,18 +180,26 @@ h1, h2, h3, h4, h5, h6, a, p {
   	margin: 0 auto;
 }*/
 #planet {
-  border: solid 1px #333;
+  border: solid 1px #fff;
   border-radius: 100%;
   margin: 0 auto;
   text-align: center;
-  transition: all 1s; }
+  transition: transform 1s;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 #planet2 {
-  border: solid 1px #333;
+  border: solid 1px #eee;
   border-radius: 100%;
   margin: 0 auto;
   text-align: center;
-  transition: all 1s; }
+  transition: transform 1s;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0); }
 
 #main_container {
   background-color: #f0f;
@@ -202,13 +211,31 @@ h1, h2, h3, h4, h5, h6, a, p {
 #modal {
   display: none; }
 
+#upper {
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+  transition: all 9s;
+  color: #fff; }
+  #upper h2 {
+    text-transform: uppercase;
+    font-weight: 100;
+    font-size: 3em;
+    letter-spacing: .2em;
+    margin: 0.5em 0 0.5em 0; }
+  #upper p {
+    line-height: 1.5em;
+    letter-spacing: 0.05em;
+    font-size: 0.9em; }
+
 #gauge {
   width: 100%;
-  background-color: #f0f;
+  background-color: #d9c055;
   overflow: hidden;
   position: absolute;
   top: 0px;
-  text-align: center; }
+  text-align: center;
+  box-shadow: 0 20px 20px #d9c055; }
   #gauge #percent {
     position: absolute;
     width: 100%;
@@ -219,30 +246,32 @@ h1, h2, h3, h4, h5, h6, a, p {
   transform: scale(1, 1); }
 .intro #planet2 {
   display: none; }
-.intro svg {
-  width: 3em; }
-
-.extract #planet {
-  transform: scale(1.5, 1.5) translateY(85%); }
-.extract svg {
-  display: none; }
-
-.mars #planet {
-  background-color: #333; }
-
 .intro #upper {
-  display: none; }
+  display: none;
+  top: -300px;
+  opacity: 0; }
 .intro #lower {
   display: block; }
 .intro #planet2 {
   opacity: 0; }
 
-.extract #upper {
-  display: block; }
-.extract #lower {
-  display: none; }
-.extract #planet2 {
-  opacity: 0; }
+.extract {
+  color: #eee; }
+  .extract #planet {
+    transform: scale(1.6, 1.6) translateY(55%); }
+  .extract #upper {
+    display: block;
+    top: 0px;
+    opacity: 1; }
+  .extract #lower {
+    display: none; }
+  .extract #planet2 {
+    opacity: 0; }
+
+.mars {
+  background: -webkit-linear-gradient(#d9c055, #d6704b); }
+  .mars #planet {
+    background-color: #d6704b; }
 
 .pairing #upper {
   display: none; }
