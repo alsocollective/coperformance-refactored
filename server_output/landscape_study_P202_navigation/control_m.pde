@@ -15,7 +15,7 @@ void setupGUI(){
   ctrl.setColorLabel(color(255));
   ctrl.close();
 
-  sliders = new Slider[16];
+  sliders = new Slider[17];
   ranges = new Range[10];
    
 
@@ -55,8 +55,9 @@ void setupGUI(){
   sliders[si++] = controlP5.addSlider("waveAlpha",0,255,left,top+posY+40,len,15);
   sliders[si++] = controlP5.addSlider("cam_scale",0.1,5,left,top+posY+60,len,15);
   sliders[si++] = controlP5.addSlider("curve_amp",0.01,PI,left,top+posY+80,len,15);
+  sliders[si++] = controlP5.addSlider("planet_radius",5000,15000,left,top+posY+100,len,15);
   
-  posY += 110;
+  posY += 130;
   sliders[si++] = controlP5.addSlider("digRadius",50,1000,left,top+posY+0,len,15);
   sliders[si++] = controlP5.addSlider("digDepth",0,5000,left,top+posY+20,len,15);
   
