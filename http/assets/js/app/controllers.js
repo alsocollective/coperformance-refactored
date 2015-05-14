@@ -53,20 +53,163 @@ controllers.planet = function($scope, Socket, User) {
 	}
 }
 
+
+// User Actions
+
 controllers.human = function($scope, Socket, User) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 
 	console.log($(document).width());
 
-	document.getElementById("planet").style.height = $(document).width() - 60;
-	document.getElementById("planet").style.width = $(document).width() - 60;
+	//Only need to define this once. I should get it earlier maybe?
+	document.getElementById("planet").style.height = $(document).width() - 120;
+	document.getElementById("planet").style.width = $(document).width() - 120;
+
+	document.getElementById("planet2").style.height = $(document).width() - 120;
+	document.getElementById("planet2").style.width = $(document).width() - 120;
+
+	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
+	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;
+
+	// $(".planet").style.height = $(document).width() - 120;
+	// $(".planet").style.width = $(document).width() - 120;
+
+	$("#ready").click(function() {
+		console.log("this");
+
+		controllers.extract();
+	});
+
 }
+
+controllers.extract = function($scope, Socket, User) {
+
+	console.log("Extract Mode");
+
+
+
+	$("#nested_container").switchClass("intro", "extract");
+
+	window.addEventListener("devicemotion", onMotionEvent, true);
+
+	var percent = document.getElementById("percent");
+	var debug = document.getElementById("debug");
+	var block = document.getElementById("touchblock");
+	var fuel = document.getElementById("gauge");
+	var mvgAvg = null;
+	var tapNum = 0;
+
+
+	// Frontend Work
+
+	function onMotionEvent(event) {
+
+		var z = event.accelerationIncludingGravity.z;
+
+		event.preventDefault();
+
+		mvgAvg = (z * 0.4) + (mvgAvg * (1 - 0.4));
+
+		if ((Math.abs(mvgAvg - z)) > 6) {
+			console.log("tap");
+			tapNum++
+			fuel.style.height = $(document).height() * (tapNum / 100) + "px"
+			console.log(tapNum);
+			percent.innerHTML = $(document).height() * (tapNum / 100) + "%"
+
+		} else if (tapNum > 100) {
+			tapNum = 0;
+			removeEvent();
+			controllers.pair();
+		} else {
+
+		}
+	}
+
+	$("#pair").click(function() {
+		removeEvent();
+		controllers.pair();
+	});
+
+	function removeEvent() {
+		fuel.style.height = 0;
+		window.removeEventListener("devicemotion", onMotionEvent, true);
+	}
+
+
+	//Frontend Touch Events
+
+	/*document.body.addEventListener('touchstart', function(e) {
+
+		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+
+		block.style.left = e.changedTouches[0].pageX - 30;
+		block.style.top = e.changedTouches[0].pageY - 30;
+
+	}, false)
+
+	block.addEventListener("touchmove", function(e) {
+
+		block.style.left = e.changedTouches[0].pageX - 30;
+		block.style.top = e.changedTouches[0].pageY - 30;
+
+		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+
+	}, false);*/
+
+
+	//Socket stuff to send to server
+
+	// console.log(Math.round(e.changedTouches[0].pageX));
+
+	// Socket.emit("touchtap", {
+	// 	// "x": Math.round(e.changedTouches[0].pageX),
+	// 	// "y": Math.round(e.changedTouches[0].pageY),
+	// 	// "tap": tapNum
+	// });
+
+}
+
+
+controllers.pair = function($scope, Socket, User) {
+
+	//Start pair
+
+	//Wave form matching!
+	//window.removeEventListener("devicemotion", );
+
+
+	console.log("Pairing Mode");
+
+	//$("#nested_container").switchClass("extract", "pairing", 1000, "easeInOutQuad");
+	$("#nested_container").switchClass("extract", "pairing");
+
+	var tmpBack = document.getElementById("nested_container");
+
+	//tmpBack.style.background = "#ff0";
+
+	$("#pairnow").click(function() {
+
+		$("#nested_container").switchClass("pairing", "extract");
+		controllers.extract();
+
+		console.log("Time to Pair Andrei");
+		// removeEvent();
+		// controllers.pair();
+	});
+}
+
+
+
+
 
 controllers.nature = function($scope, Socket, User) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 }
+
+
 
 
 //(Rev 1.0 of Tap)

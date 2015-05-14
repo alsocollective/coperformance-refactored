@@ -45,7 +45,7 @@ int qualityFactor = 4;
 boolean showStroke = true, landFill = true;
 //------ fog ------
 //Fog fog;
-PShader mars;
+PShader mars, ocean;
 boolean shaderEnabled = true;  
 boolean showFog = true;
 float fogWhiteness = 225;
@@ -66,6 +66,7 @@ void setup() {
   cursor(CROSS);
   
   mars = loadShader("MarsFrag.glsl", "MarsVert.glsl");
+  ocean = loadShader("OceanFrag.glsl", "OceanVert.glsl");
   
   myClient = new Client(this, "127.0.0.1", 5000);
   
@@ -75,7 +76,7 @@ void setup() {
   
   planet_mars= new terrain (tileCount);
   flood = new wave(tileCount);
-  //buildings = new building (tileCount);
+  buildings = new building (tileCount);
   
   topColor = color(255);
   midColor = color(200);
@@ -136,13 +137,18 @@ void draw() {
   
   resetShader();
   
-  noLights();
-  lights();
+  //noLights();
+  //lights();
   
+  if (shaderEnabled == true) shader(ocean);
   flood.update();
   flood.draw();
-  //buildings.update();
-  //buildings.draw();
+  
+  resetShader();
+  noLights();
+  lights();
+  buildings.update();
+  buildings.draw();
   
   
   popMatrix();
