@@ -1,13 +1,15 @@
 class wave {
   grid_vertex[] gridVertex;
   int tileCount;
+  PVector core;
+  float radius, angleSpan;
   //float seaLevel;
   
   // ------ noise ------
   int noiseXRange = 10;
-  int noiseRange = 10;
-  int octaves = 4;
-  float falloff = 0.5;
+  //int noiseRange = 10;
+  //int octaves = 4;
+  //float falloff = 0.5;
   float waveNoiseSeed;
   float tideSpeed = 0.01;
   
@@ -18,10 +20,13 @@ class wave {
     tileCount = n;
     waveOn = true;
     
+    radius = 5000;
+    core = new PVector(0,0,-radius);
+      
     topColor = color(255);
-  midColor = color(200);
-  bottomColor = color(155);
-    
+    midColor = color(200);
+    bottomColor = color(155);
+      
     gridVertex = new grid_vertex[tileCount*tileCount];
     for(int j=0; j<tileCount; j++){
       for(int i=0; i<tileCount; i++){
@@ -34,15 +39,22 @@ class wave {
   }
   
   void update() {
+    angleSpan = curve_amp;
     
     if (waveOn) waveNoiseSeed -= tideSpeed;
+    
     
     for (int j = 0; j < tileCount; j++) {
       for (int i = 0; i < tileCount; i++) {
         gridVertex[j * tileCount + i].update();
         float noiseX = map(i, 0, tileCount, 0, noiseRange) + waveNoiseSeed;
         float noiseY = map(j, 0, tileCount, 0 + noiseRange * gridVertex[j * tileCount + i].noiseTileIndexY, noiseRange + noiseRange * gridVertex[j * tileCount + i].noiseTileIndexY) + waveNoiseSeed;
-        gridVertex[j * tileCount + i].pos.z = noise(noiseX, noiseY);
+        
+        gridVertex[j * tileCount + i].pos.x = radius * cos(angleSpan/2 + PI/2 - i * angleSpan / tileCount);
+        gridVertex[j * tileCount + i].pos.y = radius * sin(PI/2 - angleSpan/2 + i * angleSpan / tileCount) * cos(PI/2 - angleSpan/2 + j * angleSpan / tileCount);
+        gridVertex[j * tileCount + i].pos.z = core.z + seaLevel + (radius + noise(noiseX, noiseY)*zScale)* sin(PI/2 - angleSpan/2 + i * angleSpan / tileCount) * sin(PI/2 - angleSpan/2 + j * angleSpan / tileCount);
+        
+        //gridVertex[j * tileCount + i].pos.z = noise(noiseX, noiseY);
         //gridVertex[j * tileCount + i].draw();
       }
     }
@@ -71,9 +83,12 @@ class wave {
             }
             fill(interColor, waveAlpha);
             //fill(200 * (1- gridVertex[j * tileCount + i].digScale / digDepth,50,0);
-            vertex (gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale + seaLevel + curve_amp * sin(PI*((float)i/(float)tileCount)));   
-            vertex (gridVertex[(j+1) * tileCount + i].pos.x, gridVertex[(j+1) * tileCount + i].pos.y, gridVertex[(j+1) * tileCount + i].pos.z*zScale + seaLevel + curve_amp * sin(PI*((float)i/(float)tileCount)));
-          }
+            //vertex (gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale + seaLevel + curve_amp * sin(PI*((float)i/(float)tileCount)));   
+            //vertex (gridVertex[(j+1) * tileCount + i].pos.x, gridVertex[(j+1) * tileCount + i].pos.y, gridVertex[(j+1) * tileCount + i].pos.z*zScale + seaLevel + curve_amp * sin(PI*((float)i/(float)tileCount)));
+            vertex (gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z);   
+            vertex (gridVertex[(j+1) * tileCount + i].pos.x, gridVertex[(j+1) * tileCount + i].pos.y, gridVertex[(j+1) * tileCount + i].pos.z);
+          
+        }
         }
         else if (j == tileCount - 1){
           if (gridVertex[j * tileCount + i].noiseTileIndexY != gridVertex[i].noiseTileIndexY){

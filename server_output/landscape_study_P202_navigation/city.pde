@@ -7,8 +7,10 @@ class building {
   int noiseRange = 10;
   int octaves = 4;
   float falloff = 0.5;
+  float randomness;
   
   building(int n){
+    randomness = random(0, 1);
     tileCount = n;
     gridVertex = new grid_vertex[tileCount*tileCount];
     for(int j=0; j<tileCount; j++){
@@ -18,11 +20,10 @@ class building {
         gridVertex[j * tileCount + i].pos.y = map(j, 0, tileCount, -height*scaleStep/2, height*scaleStep/2);
         gridVertex[j * tileCount + i].id = j * tileCount + i;
       }
-    }
+    } 
   }
   
   void update() {
-    
     for (int j = 0; j < tileCount; j++) {
       for (int i = 0; i < tileCount; i++) {
         gridVertex[j * tileCount + i].update();
@@ -54,13 +55,18 @@ class building {
               float amount = map(gridVertex[(j+1) * tileCount + i].pos.z, threshold, noiseYMax, 0, 1);
               interColor = lerpColor(midColor, topColor, amount);
             }
-            fill(255);
+            fill(55,150);
             pushMatrix();
             translate(gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale);
             noStroke();
             //fill(0,buildingOpacity);
             //fill(255,25);
-            box(scaleStep*5,scaleStep*5,gridVertex[j * tileCount + i].pos.z*zScale*2);
+            //drawBuilding(scaleStep*5,gridVertex[j * tileCount + i].pos.z*zScale*2);
+            pushMatrix();
+            //float tempRandomness=
+            if (gridVertex[(j+1) * tileCount + i].randomness < 0.3)
+              box(scaleStep*5,scaleStep*5,gridVertex[j * tileCount + i].pos.z*zScale*(2+gridVertex[(j+1) * tileCount + i].randomness));
+            popMatrix();
             popMatrix();
           }
         }
@@ -74,4 +80,14 @@ class building {
       endShape();
     }
   }
+}
+
+void drawBuilding(float baseSize, float buildingHeight){
+  //rect();
+  beginShape(TRIANGLE_STRIP);
+  vertex(-baseSize, 0, 0);
+  vertex(baseSize, 0, 0);
+  vertex(baseSize, 0, buildingHeight);
+  vertex(-baseSize, 0, buildingHeight);
+  endShape();
 }

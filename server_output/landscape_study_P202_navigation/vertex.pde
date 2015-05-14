@@ -5,6 +5,7 @@ class grid_vertex{
   float digScale;
   float travel;
   boolean ifDig;
+  float randomness;
   
   grid_vertex() {
     pos = new PVector(0, 0, 0);
@@ -12,6 +13,7 @@ class grid_vertex{
     noiseTileIndexY = 0;
     travel = 0;
     ifDig = false;
+    randomness = random(0, 1);
   }
   
   void update(){

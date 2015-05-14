@@ -18,12 +18,15 @@ PImage[] images = new PImage[2];
 float digPosX, digPosY;
 float digRadius = 50, digDepth;
 // ------ crater ------
-int craterCount = 0;
+int craterCount = 10;
 float minCraterRadius = 200, maxCraterRadius = 500, minCraterDepth = 200, maxCraterDepth = 1800;
 crater[] craters = new crater[craterCount];
 // ------ terrain grid ------
 grid_vertex[] gridVertex = new grid_vertex[tileCount*tileCount];
 terrain planet_mars;
+// ------ units ------
+int unitAmount = 200, unitCounter = 0;
+unit[] units = new unit[unitAmount];
 // ------ city grid ------
 building buildings;
 // ------ wave grid ------
@@ -45,10 +48,11 @@ int qualityFactor = 4;
 boolean showStroke = true, landFill = true;
 //------ fog ------
 //Fog fog;
-PShader mars, ocean;
-boolean shaderEnabled = true;  
+PShader mars, ocean, fogColor;
+boolean shaderEnabled = false;  
 boolean showFog = true;
-float fogWhiteness = 225;
+float fogWhiteness = 225, fogClearness = 5000;
+
 //------ travel ------
 float travelSpeed = 0.01;
 float positionX = 0;
@@ -57,8 +61,11 @@ float moveSpeed = 1;
 //------ camera ------
 float cam_scale = 1;
 //float 
-float curve_amp;
+float curve_amp = PI/4;
 int  noiseSeedProgression = 0;
+
+//
+PVector UV_crater, UV_unit;
 
 void setup() {
   size(1366, 768, P3D);
@@ -67,6 +74,11 @@ void setup() {
   
   mars = loadShader("MarsFrag.glsl", "MarsVert.glsl");
   ocean = loadShader("OceanFrag.glsl", "OceanVert.glsl");
+  fogColor = loadShader("fogColor.glsl");
+  //fogColor = loadShader("fogColor.glsl", "MarsVert.glsl");
+  
+  fogColor.set("fogNear", 0.0); 
+  fogColor.set("fogFar", fogClearness);
   
   myClient = new Client(this, "127.0.0.1", 5000);
   
@@ -74,9 +86,16 @@ void setup() {
     craters[i] = new crater(random(-height*scaleStep/2, height*scaleStep/2), random(-height*scaleStep/2, height*scaleStep/2), random(minCraterRadius, maxCraterRadius), random(minCraterDepth, maxCraterDepth));
   }
   
+  for (int i = 0; i < unitAmount; i++){
+    units[i] = new unit();
+  }
+  
   planet_mars= new terrain (tileCount);
   flood = new wave(tileCount);
   buildings = new building (tileCount);
+  
+  UV_crater = new PVector(0, 0);
+  UV_unit = new PVector(0, 0);
   
   topColor = color(255);
   midColor = color(200);
@@ -93,16 +112,32 @@ void draw() {
     int byteCount = myClient.readBytesUntil('\n', byteBuffer); 
     String myString = new String(byteBuffer);
     println(myString);
+    
     new Planet(myString);
+    
+    // if it's a building action
+    UV_unit.x = digPosX;
+    UV_unit.y = digPosY;
+    units[unitCounter].ifBuilt = true;
+    units[unitCounter].pos.x = UV_unit.x;
+    units[unitCounter].pos.y = UV_unit.y;
+    
+    // if it's a acquiring action
     //crater[craterCounter++].active = true;
   }
   
   hint(ENABLE_DEPTH_TEST);
-  if (shaderEnabled == true) shader(mars);
-  background(fogWhiteness);
+  //if (shaderEnabled == true) 
+  //shader(mars);
   
-  if (!shaderEnabled) lights();
-  else directionalLight(204, 204, 204, 1, 1, 11);
+  //shader(fogColor); 
+  background(fogWhiteness);
+  fogColor.set("fogNear", 0.0); 
+  fogColor.set("fogFar", fogClearness);
+  
+  //if (!shaderEnabled) lights();
+  //else directionalLight(204, 204, 204, 1, 1, 11);
+  //directionalLight(2040, 2040, 2040, 1, 1, 11);
   //lightFalloff(1.0, 0.0, 0.0);
 
   // ------ set view ------
@@ -123,34 +158,39 @@ void draw() {
   pushStyle();
   noFill();
   stroke(255);
-  box(height*scaleStep,height*scaleStep,height*scaleStep);
+  //box(height*scaleStep,height*scaleStep,height*scaleStep);
   popStyle();
-  
+
   // ------ mesh noise ------
   noiseSeed(noiseSeedProgression);
   noiseDetail(octaves, falloff);
   float noiseYMax = 0;
   float noiseStepY = (float)noiseRange/tileCount;
-  
+
+  shader(fogColor); 
+  noLights();
+
   planet_mars.update();
   planet_mars.draw();
   
-  resetShader();
+  //resetShader();
   
   //noLights();
   //lights();
   
-  if (shaderEnabled == true) shader(ocean);
+  buildings.update();
+  buildings.draw();
+  //if (shaderEnabled == true) shader(ocean);
   flood.update();
   flood.draw();
   
+  //resetShader();
+  //noLights();
+  //lights();
+  //buildings.update();
+  //buildings.draw();
+  
   resetShader();
-  noLights();
-  lights();
-  buildings.update();
-  buildings.draw();
-  
-  
   popMatrix();
   hint(DISABLE_DEPTH_TEST);
   noLights();

@@ -15,7 +15,7 @@ void setupGUI(){
   ctrl.setColorLabel(color(255));
   ctrl.close();
 
-  sliders = new Slider[15];
+  sliders = new Slider[16];
   ranges = new Range[10];
    
 
@@ -46,13 +46,15 @@ void setupGUI(){
   
   //ranges[ri++] = controlP5.addRange("trailLengthRange",0,300,minCount,maxCount,left,top+posY+0,len,15);
   //ranges[ri++] = controlP5.addRange("agentSpeedRange",0,30,speedMin,speedMax,left,top+posY+20,len,15);
-  posY += 50;
+  posY += 30;
+  sliders[si++] = controlP5.addSlider("fogClearness",500,50000,left,top+posY+0,len,15);
+  posY += 20;
   
   sliders[si++] = controlP5.addSlider("fogWhiteness",0,255,left,top+posY+0,len,15);
   sliders[si++] = controlP5.addSlider("seaLevel",0,255,left,top+posY+20,len,15);
   sliders[si++] = controlP5.addSlider("waveAlpha",0,255,left,top+posY+40,len,15);
   sliders[si++] = controlP5.addSlider("cam_scale",0.1,5,left,top+posY+60,len,15);
-  sliders[si++] = controlP5.addSlider("curve_amp",1,5000,left,top+posY+80,len,15);
+  sliders[si++] = controlP5.addSlider("curve_amp",0.01,PI,left,top+posY+80,len,15);
   
   posY += 110;
   sliders[si++] = controlP5.addSlider("digRadius",50,1000,left,top+posY+0,len,15);

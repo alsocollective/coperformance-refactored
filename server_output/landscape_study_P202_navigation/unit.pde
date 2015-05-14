@@ -1,9 +1,11 @@
 class unit {
   PVector UV, pos;
   int vertexId, districtId;
+  boolean ifBuilt;
   
   unit (){
     pos = new PVector (0,0,0);
+    ifBuilt = false;
   }
   
   void update(){
