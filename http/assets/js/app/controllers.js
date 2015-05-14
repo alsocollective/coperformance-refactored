@@ -24,6 +24,14 @@ controllers.home = function($scope, Socket, User) {
 controllers.lobby = function($scope, Socket, User) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
+
+	//Only need to define this once. I should get it earlier maybe?
+	document.getElementById("planet").style.height = $(document).width() - 200;
+	document.getElementById("planet").style.width = $(document).width() - 200;
+
+	document.getElementById("planet2").style.height = $(document).width() - 200;
+	document.getElementById("planet2").style.width = $(document).width() - 200;
+
 	$scope.setPlanet = function() {
 		console.log($scope.planet);
 		User.data.setPlanet($scope.planet);
@@ -81,11 +89,22 @@ controllers.human = function($scope, Socket, User) {
 
 controllers.extract = function($scope, Socket, User) {
 
+	delete controllers.pair();
+
 	console.log("Extract Mode");
 
+	if ($("#nested_container").hasClass("intro") == true) {
+		$("#nested_container").removeClass("intro");
+		$("#nested_container").addClass("extract");
+		console.log("done");
+	} else if ($("#nested_container").hasClass("pairing") == true) {
+		$("#nested_container").removeClass("pairing");
+		$("#nested_container").addClass("extract");
+		console.log("done2");
 
+	}
 
-	$("#nested_container").switchClass("intro", "extract");
+	//$("#nested_container").switchClass("intro", "extract");
 
 	window.addEventListener("devicemotion", onMotionEvent, true);
 
@@ -170,6 +189,8 @@ controllers.extract = function($scope, Socket, User) {
 
 controllers.pair = function($scope, Socket, User) {
 
+	//delete controllers.extract();
+
 	//Start pair
 
 	//Wave form matching!
@@ -179,7 +200,13 @@ controllers.pair = function($scope, Socket, User) {
 	console.log("Pairing Mode");
 
 	//$("#nested_container").switchClass("extract", "pairing", 1000, "easeInOutQuad");
-	$("#nested_container").switchClass("extract", "pairing");
+	//$("#nested_container").switchClass("extract", "pairing");
+
+	if ($("#nested_container").hasClass("extract") == true) {
+		$("#nested_container").removeClass("extract");
+		$("#nested_container").addClass("pairing");
+		console.log("done");
+	}
 
 	var tmpBack = document.getElementById("nested_container");
 
@@ -187,10 +214,12 @@ controllers.pair = function($scope, Socket, User) {
 
 	$("#pairnow").click(function() {
 
-		$("#nested_container").switchClass("pairing", "extract");
+		//$("#nested_container").switchClass("pairing", "extract");
+		delete controllers.pair();
+
 		controllers.extract();
 
-		console.log("Time to Pair Andrei");
+		//console.log("Time to Pair Andrei");
 		// removeEvent();
 		// controllers.pair();
 	});
@@ -198,11 +227,33 @@ controllers.pair = function($scope, Socket, User) {
 
 
 
-
+//This object is potentially redundant
 
 controllers.nature = function($scope, Socket, User) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
+
+	console.log($(document).width());
+
+	//Only need to define this once. I should get it earlier maybe?
+	document.getElementById("planet").style.height = $(document).width() - 120;
+	document.getElementById("planet").style.width = $(document).width() - 120;
+
+	document.getElementById("planet2").style.height = $(document).width() - 120;
+	document.getElementById("planet2").style.width = $(document).width() - 120;
+
+	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
+	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;
+
+	// $(".planet").style.height = $(document).width() - 120;
+	// $(".planet").style.width = $(document).width() - 120;
+
+	$("#ready").click(function() {
+		console.log("this");
+
+		controllers.extract();
+	});
+
 }
 
 
