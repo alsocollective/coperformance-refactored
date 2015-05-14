@@ -11,12 +11,16 @@ var game = {
 
 		console.log("---------\n\n\n")
 
+		console.log("planet count");
+		console.log(game.planets.mars.allList.count());
 		game.planets.mars.allList.add("bohdan");
 		game.planets.mars.allList.add("taffy");
 
 	},
 
+	addUser: function(id) {
 
+	},
 
 	planetproto: function(name) {
 		this.name = name,
@@ -35,6 +39,11 @@ var game = {
 			},
 			this.addUser = function(cookie) {
 				this.list[cookie] = true;
+				// WE need socket here! TODO fix this maybe...
+				game.socket.emit("setPlanet", {
+					user: cookie,
+					planet: this.name
+				})
 			},
 			this.checkForUser = function(cookie) {
 				if (this.list[cookie]) {
@@ -65,8 +74,7 @@ var game = {
 				// allList.list =
 			},
 			count: function() {
-
-				return 0;
+				return this.list.human.count() + this.list.nature.count();
 			}
 		},
 		this.activeMatch = {

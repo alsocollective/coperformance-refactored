@@ -33,6 +33,11 @@ var websocket = {
 					socket.id = id[1];
 				}
 
+				socket.on('joinPlanet', function(data) {
+					console.log(data);
+					var occupation = websocket.game.planets.mars.allList.add(data.id);
+
+				});
 
 				socket.on('planet', function(data) {
 					console.log("\n\n\n\n")

@@ -30,6 +30,10 @@ controllers.lobby = function($scope, Socket, User) {
 	}
 	$scope.clickPlanet = function(planet) {
 		User.data.setPlanet(planet);
+		// TODO
+		Socket.emit("joinPlanet", {
+			id: "this planets ID"
+		})
 	}
 	$scope.setOccupation = function() {
 		console.log($scope.occupation);
