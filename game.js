@@ -40,10 +40,12 @@ var game = {
 			this.addUser = function(cookie) {
 				this.list[cookie] = true;
 				// WE need socket here! TODO fix this maybe...
-				game.socket.emit("setPlanet", {
-					user: cookie,
-					planet: this.name
-				})
+				if (game.socket) {
+					game.socket.io.emit("setPlanet", {
+						user: cookie,
+						planet: this.name
+					})
+				};
 			},
 			this.checkForUser = function(cookie) {
 				if (this.list[cookie]) {

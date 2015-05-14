@@ -21,12 +21,15 @@ var websocket = {
 				// if they do we take their id and set it as our user  id
 				var re = new RegExp("id=");
 				if (!re.test(socket.handshake.headers.cookie)) {
+					console.log("initial Connect");
 					socket.emit('setup', {
 						cookie: socket.id
 					});
 				} else {
 					// we have an id so we set it to the socket id
-					var id = socket.handshake.headers.cookie.match(/id=(.*);/);
+					console.log("reconnect");
+					var id = socket.handshake.headers.cookie.match(/id=([a-z A-Z 0-9 \-\_]*)/);
+					console.log(id[1]);
 					if (id === null) {
 						id = socket.handshake.headers.cookie.match(/id=(.*)/);
 					}
@@ -35,7 +38,7 @@ var websocket = {
 
 				socket.on('joinPlanet', function(data) {
 					console.log(data);
-					var occupation = websocket.game.planets.mars.allList.add(data.id);
+					// var occupation = websocket.game.planets.mars.allList.add(, socket);
 
 				});
 
