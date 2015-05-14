@@ -1,3 +1,4 @@
+var socketCodes = {};
 var websocket = {
 	tcp: null,
 	startServer: function(httpserver) {
@@ -65,6 +66,53 @@ var websocket = {
 					}
 					websocket.io.emit('diagdata', data);
 				})
+                
+                
+                socket.on('pair', function(data) {
+                   
+                    console.log("requesting pair code");
+                    var syncCode = (""+Math.random()).substring(2,6);
+                    while(syncCode in socketCodes) {
+                       syncCode = (""+Math.random()).substring(2,6);
+                    }
+                    var sockt = socket;
+                    //socketCodes[syncCode] = [websocket.io.sockets.sockets[socket.id], null];
+                    socketCodes[syncCode] = [sockt, null];
+                    
+                    socket.syncCode = syncCode;
+                    
+                    
+                    console.log("returning sync code " + syncCode);
+                    
+                    socket.emit("sync", syncCode); 
+                    
+                    
+                });
+                
+                socket.on('syncpair', function(code) {
+                   
+                    if (code != "") {
+                        
+                        console.log("received 'syncpair' with code " + code);
+                        
+                        if (code in socketCodes) {
+                            var sockt = socket;//websocket.io.sockets.sockets[socket.id];
+                            console.log("FOUND CODE '" + code + "' IN LIST ");
+                            socketCodes[code][1] = sockt;
+                            
+                            //console.log(" SOCKET CODES ");
+                            //console.log(socketCodes);
+                            
+                            socketCodes[code][0].emit("pairsuccess", "1");
+                            socketCodes[code][1].emit("pairsuccess", "2");
+                            
+                        }
+                        
+                    }
+                    
+                    
+                    
+                });
 
 				//New Emit for TouchTap
 				socket.on('touchtap', function(data) {

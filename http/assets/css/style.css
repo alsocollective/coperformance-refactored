@@ -79,6 +79,10 @@ h1, h2, h3, h4, h5, h6, a, p {
 .bang {
   background-color: #f00; }
 
+
+.hidden { 
+    display:none;
+}
 /*#touchblock {
 	width: 60px;
 	height: 60px;

@@ -19,7 +19,58 @@ controllers.home = function($scope, Socket, User) {
 	$scope.tcpSendRandom = function() {
 		Socket.emit('sendRandom', {})
 	}
+    
+    controllers.socket = Socket;
+    
+    controllers.syncCode = "";
+    
+    controllers.socket.on("sync", function(data) {
+        
+        
+        
+        
+        controllers.syncCode = data;
+        
+        console.log(" RECEIVED SYNC CODE  " + controllers.syncCode);
+        
+        $("#pairnow").text("Pair Now \n " + controllers.syncCode);
+        
+        //$("#pairnow").parent().append("");
+        
+    });
+    
+    controllers.socket.on("pairsuccess", function(data) {
+        
+       
+        console.log("PAIR SUCCESS " + data);
+        
+        
+        $("#sync-input").hide();
+        $("#pairnow").text("PAIR SUCCESS");
+        //console.log(data); 
+        
+    });
+    
+    
+
 }
+
+
+function checkInputValue() {
+
+   var syncCode = $("input#sync-input").val();
+
+   var maxval = 4;
+   
+   console.log("CHECKING SYNC CODE INPUT " + syncCode);
+
+   if (syncCode.length < maxval || syncCode.length > maxval) return;
+
+   console.log("ATTEMPTING PAIR");
+   
+   controllers.socket.emit("syncpair", syncCode);
+
+};
 
 controllers.lobby = function($scope, Socket, User) {
 	$scope.planet = User.data.planet;
@@ -114,7 +165,15 @@ controllers.extract = function($scope, Socket, User) {
 	var fuel = document.getElementById("gauge");
 	var mvgAvg = null;
 	var tapNum = 0;
-
+    
+    
+    $('input#sync-input').change(function(event) {
+        
+        console.log("INPUT CHANGE"); 
+        checkInputValue();
+        
+    });
+    
 
 	// Frontend Work
 
@@ -207,10 +266,19 @@ controllers.pair = function($scope, Socket, User) {
 		$("#nested_container").addClass("pairing");
 		console.log("done");
 	}
+    
+   //Socket.emit("HELLO_PAIR", {"d":1})
 
 	var tmpBack = document.getElementById("nested_container");
 
 	//tmpBack.style.background = "#ff0";
+    
+	controllers.socket.emit("pair", {
+		// "x": Math.round(e.changedTouches[0].pageX),
+		// "y": Math.round(e.changedTouches[0].pageY),
+		// "tap": tapNum
+	});
+    
 
 	$("#pairnow").click(function() {
 
