@@ -1,5 +1,5 @@
-var socketCodes = {};
 var websocket = {
+	socketCodes: {},
 	tcp: null,
 	startServer: function(httpserver) {
 		websocket.io = require('socket.io')(httpserver.server);
@@ -22,18 +22,26 @@ var websocket = {
 				// if they do we take their id and set it as our user  id
 				var re = new RegExp("id=");
 				if (!re.test(socket.handshake.headers.cookie)) {
+					console.log("initial Connect");
 					socket.emit('setup', {
 						cookie: socket.id
 					});
 				} else {
 					// we have an id so we set it to the socket id
-					var id = socket.handshake.headers.cookie.match(/id=(.*);/);
+					console.log("reconnect");
+					var id = socket.handshake.headers.cookie.match(/id=([a-z A-Z 0-9 \-\_]*)/);
+					console.log(id[1]);
 					if (id === null) {
 						id = socket.handshake.headers.cookie.match(/id=(.*)/);
 					}
 					socket.id = id[1];
 				}
 
+				socket.on('joinPlanet', function(data) {
+					console.log(data);
+					// var occupation = websocket.game.planets.mars.allList.add(, socket);
+
+				});
 
 				socket.on('planet', function(data) {
 					console.log("\n\n\n\n")
@@ -66,53 +74,54 @@ var websocket = {
 					}
 					websocket.io.emit('diagdata', data);
 				})
-                
-                
-                socket.on('pair', function(data) {
-                   
-                    console.log("requesting pair code");
-                    var syncCode = (""+Math.random()).substring(2,6);
-                    while(syncCode in socketCodes) {
-                       syncCode = (""+Math.random()).substring(2,6);
-                    }
-                    var sockt = socket;
-                    //socketCodes[syncCode] = [websocket.io.sockets.sockets[socket.id], null];
-                    socketCodes[syncCode] = [sockt, null];
-                    
-                    socket.syncCode = syncCode;
-                    
-                    
-                    console.log("returning sync code " + syncCode);
-                    
-                    socket.emit("sync", syncCode); 
-                    
-                    
-                });
-                
-                socket.on('syncpair', function(code) {
-                   
-                    if (code != "") {
-                        
-                        console.log("received 'syncpair' with code " + code);
-                        
-                        if (code in socketCodes) {
-                            var sockt = socket;//websocket.io.sockets.sockets[socket.id];
-                            console.log("FOUND CODE '" + code + "' IN LIST ");
-                            socketCodes[code][1] = sockt;
-                            
-                            //console.log(" SOCKET CODES ");
-                            //console.log(socketCodes);
-                            
-                            socketCodes[code][0].emit("pairsuccess", "1");
-                            socketCodes[code][1].emit("pairsuccess", "2");
-                            
-                        }
-                        
-                    }
-                    
-                    
-                    
-                });
+
+
+				socket.on('pair', function(data) {
+
+					console.log("requesting pair code");
+					var syncCode = ("" + Math.random()).substring(2, 6);
+					while (syncCode in websocket.socketCodes) {
+						syncCode = ("" + Math.random()).substring(2, 6);
+					}
+					var sockt = socket;
+					//websocket.socketCodes[syncCode] = [websocket.io.sockets.sockets[socket.id], null];
+					websocket.socketCodes[syncCode] = [sockt, null];
+
+					socket.syncCode = syncCode;
+
+
+					console.log("returning sync code " + syncCode);
+
+					socket.emit("sync", syncCode);
+
+
+				});
+
+				socket.on('syncpair', function(code) {
+
+					if (code != "") {
+
+						console.log("received 'syncpair' with code " + code);
+
+						if (code in socketCodes) {
+							var sockt = socket; //websocket.io.sockets.sockets[socket.id];
+							console.log("FOUND CODE '" + code + "' IN LIST ");
+							socketCodes[code][1] = sockt;
+
+							//console.log(" SOCKET CODES ");
+							//console.log(socketCodes);
+
+							socketCodes[code][0].emit("pairsuccess", "1");
+							socketCodes[code][1].emit("pairsuccess", "2");
+							websocket.tcp.send.pairing();
+
+						}
+
+					}
+
+
+
+				});
 
 				//New Emit for TouchTap
 				socket.on('touchtap', function(data) {
