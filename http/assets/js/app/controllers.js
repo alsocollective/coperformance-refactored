@@ -110,6 +110,9 @@ controllers.planet = function($scope, Socket, User) {
 	$scope.clickOccupation = function(occupation) {
 		User.data.setOccupation(occupation);
 	}
+	Socket.on("makeOccupation", function(msg) {
+		console.log(msg);
+	})
 }
 
 

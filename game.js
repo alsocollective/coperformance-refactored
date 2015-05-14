@@ -65,15 +65,25 @@ var game = {
 			remove: function(cookie) {
 
 			},
-			add: function(cookie) {
+			add: function(cookie, socket) {
 				if (this.list.nature.count() < this.list.human.count()) {
 					this.list.human.addUser(cookie);
+					if (socket) {
+						console.log("human")
+						socket("makeOccupation", {
+							"occupation": "human"
+						});
+					}
 				} else {
 					this.list.nature.addUser(cookie);
+					if (socket) {
+						console.log("nature")
+						socket("makeOccupation", {
+							"occupation": "nature"
+						});
+					}
 				}
-				// add to lower one
-
-				// allList.list =
+				console.log(this.list.nature.list())
 			},
 			count: function() {
 				return this.list.human.count() + this.list.nature.count();

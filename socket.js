@@ -37,10 +37,8 @@ var websocket = {
 					socket.id = id[1];
 				}
 
-				socket.on('joinPlanet', function(data) {
-					console.log(data);
-					// var occupation = websocket.game.planets.mars.allList.add(, socket);
-
+				socket.on('joinPlanet', function(data, responce) {
+					websocket.game.planets[data.planet].allList.add(socket.id, responce);
 				});
 
 				socket.on('planet', function(data) {
