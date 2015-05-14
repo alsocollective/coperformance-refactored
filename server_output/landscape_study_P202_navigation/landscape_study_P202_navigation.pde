@@ -1,7 +1,7 @@
 import controlP5.*;
 import processing.net.*; 
 Client myClient; 
-byte[] byteBuffer = new byte[2048];
+//byte[] byteBuffer = new byte[2048];
 // ------ ControlP5 ------
 ControlP5 controlP5;
 boolean showGUI = false;
@@ -111,8 +111,11 @@ void setup() {
 
 void draw() {
   //TCP message
+  
   if (myClient.available() > 0) { 
+    byte[] byteBuffer = new byte[2048];
     int byteCount = myClient.readBytesUntil('\n', byteBuffer); 
+    //int byteCount = myClient.readBytesUntil('\n'); 
     String myString = new String(byteBuffer);
     
     new Planet(myString);
