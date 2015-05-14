@@ -31,41 +31,45 @@ factories.Socket = function($rootScope, $location) {
 
 // user will check what user then are, if they have already been to the site (via cookies)
 // if previouse user they will be redirect to the correct page
-factories.User = function($cookies,$location, Socket){
+factories.User = function($cookies, $location, Socket) {
 	var factory = {
-		init:function(){
+		init: function() {
 			//check if the user has been to the site before
 			// it returns the appropiate location to be redirected to
-			console.log(factory.data.checkForCookies());
+			// console.log("redirect to: " + factory.data.checkForCookies());
+			Socket.on("setup", function(msg) {
+				$cookies.id = msg.cookie;
+			})
+			$location.path(factory.data.checkForCookies());
 		},
-		redirect:function(){
+		redirect: function() {
 			$location.path("/test")
 		},
-		data:{
+		data: {
 			planet: null,
-			occupation: null, 
-			checkForCookies:function(){
+			occupation: null,
+			checkForCookies: function() {
 				factory.data.planet = $cookies.planet;
 				factory.data.occupation = $cookies.occupation;
-				if(!factory.data.planet){
-					return "/lobdy";
+				if (!factory.data.planet) {
+					return "/lobby";
 				} else {
-					if(factory.data.occupation){
-						return "/"+factory.data.planet+"-"+factory.data.occupation;
+					if (factory.data.occupation) {
+						return "/" + factory.data.planet + "/" + factory.data.occupation;
 					}
-					return "/"+factory.data.planet;
+					return "/" + factory.data.planet;
 				}
 			},
-			setPlanet:function(data){
+			setPlanet: function(data) {
 				$cookies.planet = data;
 				factory.data.planet = data;
 			},
-			setOccupation:function(data){
+			setOccupation: function(data) {
 				$cookies.occupation = data;
 				factory.data.occupation = data;
 			},
 		}
-		
+
 
 	};
 

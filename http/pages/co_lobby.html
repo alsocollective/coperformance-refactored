@@ -1,0 +1,41 @@
+<div id="lobby">
+
+	<!-- USE SVG INSTEAD of Border Radius -->
+
+	<div id="openStmt">
+		<!-- <h1>Hello</h1>
+		<p>Choose a planet.</p> -->
+
+		<a href="#/earth" ng-click="clickPlanet('earth')"><div id="planet"><h3>Earth</h3></div></a>
+		<h2>OR</h2>
+		<a href="#/mars" ng-click="clickPlanet('mars')"><div id="planet2"><h3>Mars</h3></div></a>
+
+	<!-- 	<a href="#/earth" ng-click="clickPlanet('earth')"><svg class="planet">
+  <circle cx="50" cy="50" r="40" fill="red" />
+</svg></a>
+		<h3>Earth</h3>
+		<a href="#/mars" ng-click="clickPlanet('mars')"><svg class="planet">
+  <circle cx="50" cy="50" r="40" fill="blue" />
+</svg></a>
+		<h3>Mars</h3> -->
+
+	</div>
+	
+</div>
+
+<div class="hidden debug"><h3>Lobby</h3>
+<hr>
+<h3>Quick set cookies</h3>
+<select ng-model="planet" ng-change="setPlanet()">
+	<option value="">none</option>
+	<option value="earth">earth</option>
+	<option value="mars">mars</option>
+</select>
+<select ng-model="occupation" ng-change="setOccupation()">
+	<option value="">none</option>
+	<option value="human">human</option>
+	<option value="nature">nature</option>
+</select>
+<br>
+<br>
+</div>

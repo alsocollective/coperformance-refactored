@@ -1,22 +1,333 @@
 var controllers = {};
 
-controllers.home = function(Socket) {
+controllers.home = function($scope, Socket, User) {
 
-
+	$scope.reset = function() {
+		User.data.setPlanet(null);
+		User.data.setOccupation(null);
+	}
+	$scope.tcpPlanet = function() {
+		Socket.emit('planet', {
+			"planet": 1
+		});
+	}
+	$scope.tcpPaired = function() {
+		Socket.emit('paired', {
+			"planet": 0
+		});
+	}
+	$scope.tcpSendRandom = function() {
+		Socket.emit('sendRandom', {})
+	}
 }
 
-controllers.lobby = function($scope,Socket,User){
-
-	$scope.planet = User.data.planet;	
+controllers.lobby = function($scope, Socket, User) {
+	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
-	$scope.setPlanet = function(){
-		console.log($scope.planet)
+
+	//Only need to define this once. I should get it earlier maybe?
+	document.getElementById("planet").style.height = $(document).width() - 200;
+	document.getElementById("planet").style.width = $(document).width() - 200;
+
+	document.getElementById("planet2").style.height = $(document).width() - 200;
+	document.getElementById("planet2").style.width = $(document).width() - 200;
+
+	$scope.setPlanet = function() {
+		console.log($scope.planet);
 		User.data.setPlanet($scope.planet);
 	}
-	$scope.setOccupation = function(){
+	$scope.clickPlanet = function(planet) {
+		User.data.setPlanet(planet);
+	}
+	$scope.setOccupation = function() {
 		console.log($scope.occupation);
 		User.data.setOccupation($scope.occupation);
 	}
+
+}
+
+controllers.planet = function($scope, Socket, User) {
+	$scope.planet = User.data.planet;
+	$scope.occupation = User.data.occupation;
+
+	$scope.currentPage = window.location.hash.split("/")[1];
+
+	$scope.clickOccupation = function(occupation) {
+		User.data.setOccupation(occupation);
+	}
+}
+
+
+// User Actions
+
+controllers.human = function($scope, Socket, User) {
+	$scope.planet = User.data.planet;
+	$scope.occupation = User.data.occupation;
+
+	console.log($(document).width());
+
+	//Only need to define this once. I should get it earlier maybe?
+	document.getElementById("planet").style.height = $(document).width() - 120;
+	document.getElementById("planet").style.width = $(document).width() - 120;
+
+	document.getElementById("planet2").style.height = $(document).width() - 120;
+	document.getElementById("planet2").style.width = $(document).width() - 120;
+
+	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
+	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;
+
+	// $(".planet").style.height = $(document).width() - 120;
+	// $(".planet").style.width = $(document).width() - 120;
+
+	$("#ready").click(function() {
+		console.log("this");
+
+		controllers.extract();
+	});
+
+}
+
+controllers.extract = function($scope, Socket, User) {
+
+	delete controllers.pair();
+
+	console.log("Extract Mode");
+
+	if ($("#nested_container").hasClass("intro") == true) {
+		$("#nested_container").removeClass("intro");
+		$("#nested_container").addClass("extract");
+		console.log("done");
+	} else if ($("#nested_container").hasClass("pairing") == true) {
+		$("#nested_container").removeClass("pairing");
+		$("#nested_container").addClass("extract");
+		console.log("done2");
+
+	}
+
+	//$("#nested_container").switchClass("intro", "extract");
+
+	window.addEventListener("devicemotion", onMotionEvent, true);
+
+	var percent = document.getElementById("percent");
+	var debug = document.getElementById("debug");
+	var block = document.getElementById("touchblock");
+	var fuel = document.getElementById("gauge");
+	var mvgAvg = null;
+	var tapNum = 0;
+
+
+	// Frontend Work
+
+	function onMotionEvent(event) {
+
+		var z = event.accelerationIncludingGravity.z;
+
+		event.preventDefault();
+
+		mvgAvg = (z * 0.4) + (mvgAvg * (1 - 0.4));
+
+		if ((Math.abs(mvgAvg - z)) > 6) {
+			console.log("tap");
+			tapNum++
+			fuel.style.height = $(document).height() * (tapNum / 100) + "px"
+			console.log(tapNum);
+			percent.innerHTML = $(document).height() * (tapNum / 100) + "%"
+
+		} else if (tapNum > 100) {
+			tapNum = 0;
+			removeEvent();
+			controllers.pair();
+		} else {
+
+		}
+	}
+
+	$("#pair").click(function() {
+		removeEvent();
+		controllers.pair();
+	});
+
+	function removeEvent() {
+		fuel.style.height = 0;
+		window.removeEventListener("devicemotion", onMotionEvent, true);
+	}
+
+
+	//Frontend Touch Events
+
+	/*document.body.addEventListener('touchstart', function(e) {
+
+		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+
+		block.style.left = e.changedTouches[0].pageX - 30;
+		block.style.top = e.changedTouches[0].pageY - 30;
+
+	}, false)
+
+	block.addEventListener("touchmove", function(e) {
+
+		block.style.left = e.changedTouches[0].pageX - 30;
+		block.style.top = e.changedTouches[0].pageY - 30;
+
+		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+
+	}, false);*/
+
+
+	//Socket stuff to send to server
+
+	// console.log(Math.round(e.changedTouches[0].pageX));
+
+	// Socket.emit("touchtap", {
+	// 	// "x": Math.round(e.changedTouches[0].pageX),
+	// 	// "y": Math.round(e.changedTouches[0].pageY),
+	// 	// "tap": tapNum
+	// });
+
+}
+
+
+controllers.pair = function($scope, Socket, User) {
+
+	//delete controllers.extract();
+
+	//Start pair
+
+	//Wave form matching!
+	//window.removeEventListener("devicemotion", );
+
+
+	console.log("Pairing Mode");
+
+	//$("#nested_container").switchClass("extract", "pairing", 1000, "easeInOutQuad");
+	//$("#nested_container").switchClass("extract", "pairing");
+
+	if ($("#nested_container").hasClass("extract") == true) {
+		$("#nested_container").removeClass("extract");
+		$("#nested_container").addClass("pairing");
+		console.log("done");
+	}
+
+	var tmpBack = document.getElementById("nested_container");
+
+	//tmpBack.style.background = "#ff0";
+
+	$("#pairnow").click(function() {
+
+		//$("#nested_container").switchClass("pairing", "extract");
+		delete controllers.pair();
+
+		controllers.extract();
+
+		//console.log("Time to Pair Andrei");
+		// removeEvent();
+		// controllers.pair();
+	});
+}
+
+
+
+//This object is potentially redundant
+
+controllers.nature = function($scope, Socket, User) {
+	$scope.planet = User.data.planet;
+	$scope.occupation = User.data.occupation;
+
+	console.log($(document).width());
+
+	//Only need to define this once. I should get it earlier maybe?
+	document.getElementById("planet").style.height = $(document).width() - 120;
+	document.getElementById("planet").style.width = $(document).width() - 120;
+
+	document.getElementById("planet2").style.height = $(document).width() - 120;
+	document.getElementById("planet2").style.width = $(document).width() - 120;
+
+	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
+	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;
+
+	// $(".planet").style.height = $(document).width() - 120;
+	// $(".planet").style.width = $(document).width() - 120;
+
+	$("#ready").click(function() {
+		console.log("this");
+
+		controllers.extract();
+	});
+
+}
+
+
+
+
+//(Rev 1.0 of Tap)
+
+controllers.taptest = function($scope, Socket, User) {
+
+	window.addEventListener("devicemotion", onMotionEvent, true);
+
+	var percent = document.getElementById("percent");
+	var debug = document.getElementById("debug");
+	var block = document.getElementById("touchblock");
+	var fuel = document.getElementById("gauge");
+	var mvgAvg = null;
+	var tapNum = 0;
+
+
+	// Frontend Work
+
+	function onMotionEvent(event) {
+
+		var z = event.accelerationIncludingGravity.z;
+
+		event.preventDefault();
+
+		mvgAvg = (z * 0.4) + (mvgAvg * (1 - 0.4));
+
+		if ((Math.abs(mvgAvg - z)) > 6) {
+			console.log("tap");
+			tapNum++
+			fuel.style.height = $(document).height() * (tapNum / 100) + "px"
+			console.log(tapNum);
+			percent.innerHTML = $(document).height() * (tapNum / 100) + "px"
+
+		} else if (tapNum > 100) {
+			tapNum = 0;
+		} else {
+
+		}
+	}
+
+
+	//Frontend Touch Events
+
+	document.body.addEventListener('touchstart', function(e) {
+
+		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+
+		block.style.left = e.changedTouches[0].pageX - 30;
+		block.style.top = e.changedTouches[0].pageY - 30;
+
+	}, false)
+
+	block.addEventListener("touchmove", function(e) {
+
+		block.style.left = e.changedTouches[0].pageX - 30;
+		block.style.top = e.changedTouches[0].pageY - 30;
+
+		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+
+	}, false);
+
+
+	//Socket stuff to send to server
+
+	// console.log(Math.round(e.changedTouches[0].pageX));
+
+	Socket.emit("touchtap", {
+		// "x": Math.round(e.changedTouches[0].pageX),
+		// "y": Math.round(e.changedTouches[0].pageY),
+		// "tap": tapNum
+	});
 }
 
 

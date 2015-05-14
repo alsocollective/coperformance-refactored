@@ -1,33 +1,36 @@
 @-webkit-keyframes enter {
   0% {
     left: 100%; }
-
   100% {
     left: 0%; } }
 @keyframes enter {
   0% {
     left: 100%; }
-
   100% {
     left: 0%; } }
 @-webkit-keyframes exit {
   100% {
     left: -100%; }
-
   0% {
     left: 0%; } }
 @keyframes exit {
   100% {
     left: -100%; }
-
   0% {
     left: 0%; } }
 .ng-enter {
-  -webkit-animation: enter 0.8s ease-out;
-  animation: enter 0.8s ease-out; }
+  -webkit-animation: enter 1.0s ease-out;
+  animation: enter 1.0s ease-out;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  /* Other transform properties here */ }
 
 .ng-leave {
   bottom: 0%;
   position: absolute;
   -webkit-animation: exit 0.4s;
   animation: exit 0.4s; }
+
+/*# sourceMappingURL=animation.css.map */

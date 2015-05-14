@@ -5,12 +5,47 @@ var copofermance = angular.module("copofermance", ['ngRoute', 'ngCookies', 'ngAn
 				controller: "home",
 				templateUrl: 'pages/home.html'
 			})
-			.when("/lobby",{
+			.when("/lobby", {
 				controller: "lobby",
-				templateUrl: "pages/lobby.html"
-			})			
+				templateUrl: "pages/co_lobby.html"
+			})
 
 
+
+		.when("/mars", {
+			controller: "planet",
+			templateUrl: "pages/co_planet.html"
+		})
+			.when("/mars/human", {
+				controller: "human",
+				templateUrl: "pages/co_occupation.html"
+			})
+			.when("/mars/nature", {
+				controller: "nature",
+				templateUrl: "pages/co_occupation.html"
+			})
+
+
+
+		.when("/earth", {
+			controller: "planet",
+			templateUrl: "pages/co_planet.html"
+		})
+			.when("/earth/human", {
+				controller: "human",
+				templateUrl: "pages/co_occupation.html"
+			})
+			.when("/earth/nature", {
+				controller: "nature",
+				templateUrl: "pages/co_occupation.html"
+			})
+
+
+
+		.when('/taptest', {
+			controller: "taptest",
+			templateUrl: 'pages/taptest.html'
+		})
 			.when('/input', {
 				controller: "diagnosticsout",
 				templateUrl: 'pages/input.html'
