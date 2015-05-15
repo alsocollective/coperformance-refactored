@@ -79,10 +79,6 @@ h1, h2, h3, h4, h5, h6, a, p {
 .bang {
   background-color: #f00; }
 
-
-.hidden { 
-    display:none;
-}
 /*#touchblock {
 	width: 60px;
 	height: 60px;
@@ -209,7 +205,12 @@ h1, h2, h3, h4, h5, h6, a, p {
       margin-top: 2em;
       letter-spacing: 0.4em;
       text-transform: uppercase;
-      font-weight: 100; }
+      font-weight: 100;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0; }
   #lobby #planet2 {
     background-color: #f33; }
     #lobby #planet2 h3 {
@@ -223,24 +224,16 @@ h1, h2, h3, h4, h5, h6, a, p {
 #planet {
   border: solid 1px;
   border-radius: 100%;
-  margin: 0 auto;
-  text-align: center;
-  transition: transform 1s;
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0); }
+  width: 80%;
+  padding-bottom: 80%;
+  margin: 0 auto; }
 
 #planet2 {
   border: solid 1px;
   border-radius: 100%;
-  margin: 0 auto;
-  text-align: center;
-  transition: transform 1s;
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0); }
+  width: 80%;
+  padding-bottom: 80%;
+  margin: 0 auto; }
 
 #main_container {
   background-color: #f0f;

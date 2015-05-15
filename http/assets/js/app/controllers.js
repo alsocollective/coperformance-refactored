@@ -74,11 +74,11 @@ controllers.lobby = function($scope, Socket, User) {
 	$scope.occupation = User.data.occupation;
 
 	//Only need to define this once. I should get it earlier maybe?
-	document.getElementById("planet").style.height = $(document).width() - 200;
-	document.getElementById("planet").style.width = $(document).width() - 200;
+	// document.getElementById("planet").style.height = $(document).width() - 200;
+	// document.getElementById("planet").style.width = $(document).width() - 200;
 
-	document.getElementById("planet2").style.height = $(document).width() - 200;
-	document.getElementById("planet2").style.width = $(document).width() - 200;
+	// document.getElementById("planet2").style.height = $(document).width() - 200;
+	// document.getElementById("planet2").style.width = $(document).width() - 200;
 
 	$scope.setPlanet = function() {
 		console.log($scope.planet);
@@ -119,11 +119,11 @@ controllers.human = function($scope, Socket, User) {
 	console.log($(document).width());
 
 	//Only need to define this once. I should get it earlier maybe?
-	document.getElementById("planet").style.height = $(document).width() - 120;
-	document.getElementById("planet").style.width = $(document).width() - 120;
+	// document.getElementById("planet").style.height = $(document).width() - 120;
+	// document.getElementById("planet").style.width = $(document).width() - 120;
 
-	document.getElementById("planet2").style.height = $(document).width() - 120;
-	document.getElementById("planet2").style.width = $(document).width() - 120;
+	// document.getElementById("planet2").style.height = $(document).width() - 120;
+	// document.getElementById("planet2").style.width = $(document).width() - 120;
 
 	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
 	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;
@@ -332,11 +332,11 @@ controllers.nature = function($scope, Socket, User) {
 	console.log($(document).width());
 
 	//Only need to define this once. I should get it earlier maybe?
-	document.getElementById("planet").style.height = $(document).width() - 120;
-	document.getElementById("planet").style.width = $(document).width() - 120;
+	// document.getElementById("planet").style.height = $(document).width() - 120;
+	// document.getElementById("planet").style.width = $(document).width() - 120;
 
-	document.getElementById("planet2").style.height = $(document).width() - 120;
-	document.getElementById("planet2").style.width = $(document).width() - 120;
+	// document.getElementById("planet2").style.height = $(document).width() - 120;
+	// document.getElementById("planet2").style.width = $(document).width() - 120;
 
 	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
 	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;

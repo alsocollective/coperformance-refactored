@@ -70,14 +70,11 @@ factories.User = function($cookies, $location, Socket) {
 				factory.data.occupation = data;
 			},
 		}
-
-
 	};
 
 	factory.init();
 
 	return factory;
-
 }
 
 copofermance.factory(factories);
