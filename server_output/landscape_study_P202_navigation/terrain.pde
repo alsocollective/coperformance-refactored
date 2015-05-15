@@ -34,7 +34,10 @@ class terrain {
     
     for (int j = 0; j < tileCount; j++) {
       for (int i = 0; i < tileCount; i++) {
-        angleSpan = curve_amp;
+        angleSpan = curve_amp; // assigning the gloable curve_amp value
+        radius = planet_radius; // assigning the gloable planet_radius value
+        core.z = -radius;
+        
         gridVertex[j * tileCount + i].update();
         float noiseX = map(i, 0, tileCount, 0, noiseRange);
         float noiseY = map(j, 0, tileCount, 0 + noiseRange * gridVertex[j * tileCount + i].noiseTileIndexY, noiseRange + noiseRange * gridVertex[j * tileCount + i].noiseTileIndexY);

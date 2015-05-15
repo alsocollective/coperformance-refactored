@@ -1,7 +1,7 @@
 import controlP5.*;
 import processing.net.*; 
 Client myClient; 
-byte[] byteBuffer = new byte[255];
+//byte[] byteBuffer = new byte[2048];
 // ------ ControlP5 ------
 ControlP5 controlP5;
 boolean showGUI = false;
@@ -18,7 +18,7 @@ PImage[] images = new PImage[2];
 float digPosX, digPosY;
 float digRadius = 50, digDepth;
 // ------ crater ------
-int craterCount = 10;
+int craterCount = 10, craterCounter = 0;
 float minCraterRadius = 200, maxCraterRadius = 500, minCraterDepth = 200, maxCraterDepth = 1800;
 crater[] craters = new crater[craterCount];
 // ------ terrain grid ------
@@ -61,10 +61,10 @@ float moveSpeed = 1;
 //------ camera ------
 float cam_scale = 1;
 //float 
-float curve_amp = PI/4;
+float curve_amp = PI/4, planet_radius = 5000;
 int  noiseSeedProgression = 0;
 
-//
+// unified coordinates
 PVector UV_crater, UV_unit;
 
 void setup() {
@@ -83,7 +83,10 @@ void setup() {
   myClient = new Client(this, "127.0.0.1", 5000);
   
   for (int i = 0; i < craterCount; i++){
-    craters[i] = new crater(random(-height*scaleStep/2, height*scaleStep/2), random(-height*scaleStep/2, height*scaleStep/2), random(minCraterRadius, maxCraterRadius), random(minCraterDepth, maxCraterDepth));
+    craters[i] = new crater(random(-height*scaleStep/2, height*scaleStep/2), 
+      random(-height*scaleStep/2, height*scaleStep/2), 
+      random(minCraterRadius, maxCraterRadius), 
+      random(minCraterDepth, maxCraterDepth));
   }
   
   for (int i = 0; i < unitAmount; i++){
@@ -108,21 +111,31 @@ void setup() {
 
 void draw() {
   //TCP message
+  
   if (myClient.available() > 0) { 
+    byte[] byteBuffer = new byte[2048];
     int byteCount = myClient.readBytesUntil('\n', byteBuffer); 
+    //int byteCount = myClient.readBytesUntil('\n'); 
     String myString = new String(byteBuffer);
-    println(myString);
     
     new Planet(myString);
     
     // if it's a building action
-    UV_unit.x = digPosX;
-    UV_unit.y = digPosY;
-    units[unitCounter].ifBuilt = true;
-    units[unitCounter].pos.x = UV_unit.x;
-    units[unitCounter].pos.y = UV_unit.y;
-    
+    if (unitCounter < unitAmount){
+      UV_unit.x = digPosX;
+      UV_unit.y = digPosY;
+      units[unitCounter].active = true;
+      units[unitCounter].pos.x = UV_unit.x;
+      units[unitCounter].pos.y = UV_unit.y;
+    }
     // if it's a acquiring action
+    if (craterCounter < craterCount){
+      UV_crater.x = digPosX;
+      UV_crater.y = digPosY;
+      craters[unitCounter].active = true;
+      craters[unitCounter].pos.x = UV_crater.x;
+      craters[unitCounter].pos.y = UV_crater.y;
+    }
     //crater[craterCounter++].active = true;
   }
   
@@ -171,15 +184,19 @@ void draw() {
   noLights();
 
   planet_mars.update();
-  planet_mars.draw();
+  //planet_mars.draw();
+  
+  for (int i = 0; i < 1; i++){
+    units[i].draw();
+  }
   
   //resetShader();
   
   //noLights();
   //lights();
   
-  buildings.update();
-  buildings.draw();
+  //buildings.update();
+  //buildings.draw();
   //if (shaderEnabled == true) shader(ocean);
   flood.update();
   flood.draw();
@@ -190,6 +207,7 @@ void draw() {
   //buildings.update();
   //buildings.draw();
   
+  // draw GUI
   resetShader();
   popMatrix();
   hint(DISABLE_DEPTH_TEST);
