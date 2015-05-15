@@ -26,9 +26,6 @@ controllers.home = function($scope, Socket, User) {
 
 	controllers.socket.on("sync", function(data) {
 
-
-
-
 		controllers.syncCode = data;
 
 		console.log(" RECEIVED SYNC CODE  " + controllers.syncCode);
@@ -148,6 +145,8 @@ controllers.extract = function($scope, Socket, User) {
 
 	console.log("Extract Mode");
 
+	//Bind events here first once only...
+
 	if ($("#nested_container").hasClass("intro") == true) {
 		$("#nested_container").removeClass("intro");
 		$("#nested_container").addClass("extract");
@@ -165,13 +164,10 @@ controllers.extract = function($scope, Socket, User) {
 
 	var percent = document.getElementById("percent");
 	var debug = document.getElementById("debug");
-	var block = document.getElementById("touchblock");
+	//var block = document.getElementById("touchblock");
 	var fuel = document.getElementById("gauge");
 	var mvgAvg = null;
 	var tapNum = 0;
-
-
-
 
 
 	// Frontend Work
@@ -185,11 +181,20 @@ controllers.extract = function($scope, Socket, User) {
 		mvgAvg = (z * 0.4) + (mvgAvg * (1 - 0.4));
 
 		if ((Math.abs(mvgAvg - z)) > 6) {
-			console.log("tap");
+			//console.log("tap");
 			tapNum++
-			fuel.style.height = $(document).height() * (tapNum / 100) + "px"
+			fuel.style.height = $(document).height() * (tapNum / 100) + "px";
+			//console.log(tapNum);
+			percent.innerHTML = (tapNum / $(document).height()) * 100 + "%";
+
+			fuel.style.height = (tapNum / $(document).height()) * 100 + "px";
+
 			console.log(tapNum);
-			percent.innerHTML = $(document).height() * (tapNum / 100) + "%"
+			console.log($(document).height() * (tapNum / 100) + "px");
+			console.log($(document).height());
+			console.log((tapNum / $(document).height()) * 100);
+
+
 
 		} else if (tapNum > 100) {
 			tapNum = 0;
@@ -199,6 +204,8 @@ controllers.extract = function($scope, Socket, User) {
 
 		}
 	}
+
+	$("#pair").unbind(); //Maybe run this once upon init.
 
 	$("#pair").click(function() {
 		removeEvent();
@@ -213,34 +220,57 @@ controllers.extract = function($scope, Socket, User) {
 
 	//Frontend Touch Events
 
-	/*document.body.addEventListener('touchstart', function(e) {
+	// This is within the controllers namespace.
+	controllers.planetX = 0;
+	controllers.planetY = 0;
 
-		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+	$(window).bind('touchstart', function(e) {
 
-		block.style.left = e.changedTouches[0].pageX - 30;
-		block.style.top = e.changedTouches[0].pageY - 30;
+		e.preventDefault();
 
-	}, false)
+		//debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
 
-	block.addEventListener("touchmove", function(e) {
+		console.log(e.originalEvent.changedTouches[0].pageX);
+		console.log(e.originalEvent.changedTouches[0].pageY);
 
-		block.style.left = e.changedTouches[0].pageX - 30;
-		block.style.top = e.changedTouches[0].pageY - 30;
+		$(window).unbind("touchstart");
 
-		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
 
-	}, false);*/
+
+		//console.log(e);
+	});
+
+	/*$(window).bind("touchmove", function(e) {
+
+		e.preventDefault();
+
+		// block.style.left = e.changedTouches[0].pageX - 30;
+		// block.style.top = e.changedTouches[0].pageY - 30;
+
+		// console.log(e.targetTouches[0].pageX - 30);
+		// console.log(e.targetTouches[0].pageY - 30);
+
+		console.log(e.originalEvent.changedTouches[0].pageX);
+		console.log(e.originalEvent.changedTouches[0].pageY);
+
+		//console.log(e);
+
+		// debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+	});*/
 
 
 	//Socket stuff to send to server
 
 	// console.log(Math.round(e.changedTouches[0].pageX));
 
-	// Socket.emit("touchtap", {
-	// 	// "x": Math.round(e.changedTouches[0].pageX),
-	// 	// "y": Math.round(e.changedTouches[0].pageY),
-	// 	// "tap": tapNum
-	// });
+	controllers.socket.emit("touchtap", {
+
+
+
+		// "x": Math.round(e.changedTouches[0].pageX),
+		// "y": Math.round(e.changedTouches[0].pageY),
+		// "tap": tapNum
+	});
 
 }
 
@@ -256,7 +286,7 @@ controllers.pair = function($scope, Socket, User) {
 
 
 	console.log("Pairing Mode");
-
+	$('input#sync-input').unbind();
 	$("#sync-input").show();
 	$("#sync-input").val("");
 	$('input#sync-input').change(function(event) {
@@ -284,17 +314,10 @@ controllers.pair = function($scope, Socket, User) {
 		// "tap": tapNum
 	});
 
+	$("#pairnow").unbind();
 
 	$("#pairnow").click(function() {
-
-		//$("#nested_container").switchClass("pairing", "extract");
-		delete controllers.pair();
-
 		controllers.extract();
-
-		//console.log("Time to Pair Andrei");
-		// removeEvent();
-		// controllers.pair();
 	});
 }
 

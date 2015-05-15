@@ -103,16 +103,16 @@ var websocket = {
 
 						console.log("received 'syncpair' with code " + code);
 
-						if (code in socketCodes) {
+						if (code in websocket.socketCodes) {
 							var sockt = socket; //websocket.io.sockets.sockets[socket.id];
 							console.log("FOUND CODE '" + code + "' IN LIST ");
-							socketCodes[code][1] = sockt;
+							websocket.socketCodes[code][1] = sockt;
 
 							//console.log(" SOCKET CODES ");
 							//console.log(socketCodes);
 
-							socketCodes[code][0].emit("pairsuccess", "1");
-							socketCodes[code][1].emit("pairsuccess", "2");
+							websocket.socketCodes[code][0].emit("pairsuccess", "1");
+							websocket.socketCodes[code][1].emit("pairsuccess", "2");
 							websocket.tcp.send.pairing();
 
 						}
