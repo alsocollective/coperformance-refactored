@@ -1,5 +1,12 @@
 var controllers = {};
 
+/* Dot on planet
+BA: TCP for pair completion
+AV: Gestural pairing
+AV: Debugger working
+*/
+
+
 controllers.home = function($scope, Socket, User) {
 
 	$scope.reset = function() {
@@ -42,21 +49,6 @@ function checkInputValue() {
 controllers.lobby = function($scope, Socket, User, $location) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
-
-	//Only need to define this once. I should get it earlier maybe?
-	// <<<<<<< HEAD
-	// 	// document.getElementById("planet").style.height = $(document).width() - 200;
-	// 	// document.getElementById("planet").style.width = $(document).width() - 200;
-
-	// 	// document.getElementById("planet2").style.height = $(document).width() - 200;
-	// 	// document.getElementById("planet2").style.width = $(document).width() - 200;
-	// =======
-	// 	//document.getElementById("planet").style.height = $(document).width() - 200;
-	// 	//document.getElementById("planet").style.width = $(document).width() - 200;
-
-	// 	//document.getElementById("planet2").style.height = $(document).width() - 200;
-	// 	//document.getElementById("planet2").style.width = $(document).width() - 200;
-	// >>>>>>> 7ea0802f013099e136fa807af0a71402e76b6a05
 
 	$scope.setPlanet = function() {
 		console.log($scope.planet);
@@ -117,40 +109,6 @@ controllers.human = function($scope, Socket, User) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 
-	console.log($(document).width());
-	console.log(document.getElementById("planet"));
-
-	//setTimeout(function() {
-	var docSize = $(document).width();
-
-	console.log("DOC SIZE " + docSize);
-
-
-	$("#planet").height(docSize);
-	$("#planet").width(docSize);
-	//}, 0)
-
-	//Only need to define this once. I should get it earlier maybe?
-	// <<<<<<< HEAD
-	// 	// document.getElementById("planet").style.height = $(document).width() - 120;
-	// 	// document.getElementById("planet").style.width = $(document).width() - 120;
-
-	// 	// document.getElementById("planet2").style.height = $(document).width() - 120;
-	// 	// document.getElementById("planet2").style.width = $(document).width() - 120;
-	// =======
-	// 	//document.getElementById("planet").style.height = ($(document).width() - 120) + "px";
-	// 	//document.getElementById("planet").style.width = ($(document).width() - 120) + "px";
-
-	// 	//document.getElementById("planet2").style.height = $(document).width() - 120;
-	// 	//document.getElementById("planet2").style.width = $(document).width() - 120;
-	// >>>>>>> 7ea0802f013099e136fa807af0a71402e76b6a05
-
-	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
-	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;
-
-	// $(".planet").style.height = $(document).width() - 120;
-	// $(".planet").style.width = $(document).width() - 120;
-
 	$("#ready").click(function() {
 		console.log("this");
 
@@ -159,8 +117,6 @@ controllers.human = function($scope, Socket, User) {
 }
 
 controllers.extract = function($scope, Socket, User) {
-
-	// delete controllers.pair();
 
 	console.log("Extract Mode");
 
@@ -177,13 +133,10 @@ controllers.extract = function($scope, Socket, User) {
 
 	}
 
-	//$("#nested_container").switchClass("intro", "extract");
-
 	window.addEventListener("devicemotion", onMotionEvent, true);
 
 	var percent = document.getElementById("percent");
 	var debug = document.getElementById("debug");
-	//var block = document.getElementById("touchblock");
 	var fuel = document.getElementById("gauge");
 	var mvgAvg = null;
 	var tapNum = 0;
@@ -200,21 +153,16 @@ controllers.extract = function($scope, Socket, User) {
 		mvgAvg = (z * 0.4) + (mvgAvg * (1 - 0.4));
 
 		if ((Math.abs(mvgAvg - z)) > 6) {
-			//console.log("tap");
+
 			tapNum++
+
+			var mapped = (tapNum - 0) * ($(document).height() - 0) / (100 - 0) + 0;
+
 			fuel.style.height = $(document).height() * (tapNum / 100) + "px";
-			//console.log(tapNum);
-			percent.innerHTML = (tapNum / $(document).height()) * 100 + "%";
-
-			fuel.style.height = (tapNum / $(document).height()) * 100 + "px";
-
-			console.log(tapNum);
-			console.log($(document).height() * (tapNum / 100) + "px");
-			console.log($(document).height());
-			console.log((tapNum / $(document).height()) * 100);
+			percent.innerHTML = Math.ceil((mapped / $(document).height()) * 100) + "%";
 
 		} else if (tapNum != User.data.percent && tapNum % 10 == 0) {
-			User.data.setPosition(tapNum);
+			User.data.setPercent(tapNum);
 			Socket.emit("touchtap", {
 				"planet": User.data.planet,
 				"occupation": User.data.occupation,
@@ -246,67 +194,31 @@ controllers.extract = function($scope, Socket, User) {
 
 	//Frontend Touch Events
 
-	// This is within the controllers namespace.
+	/*
+	This would look great with an animation
+	*/
 
 	$(window).bind('touchstart', function(e) {
 
 		e.preventDefault();
 
-		//debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+		User.data.setPosition(Math.round(e.originalEvent.changedTouches[0].pageX), Math.round(e.originalEvent.changedTouches[0].pageY));
 
-		User.data.setPosition(e.originalEvent.changedTouches[0].pageX, e.originalEvent.changedTouches[0].pageY);
+		$("#touchdot").css({
+			left: +e.originalEvent.changedTouches[0].pageX - 20
+		});
+
+		$("#touchdot").css({
+			top: +e.originalEvent.changedTouches[0].pageY - 20
+		});
 
 		$(window).unbind("touchstart");
 
-
-
-		//console.log(e);
 	});
-
-	/*$(window).bind("touchmove", function(e) {
-
-		e.preventDefault();
-
-		// block.style.left = e.changedTouches[0].pageX - 30;
-		// block.style.top = e.changedTouches[0].pageY - 30;
-
-		// console.log(e.targetTouches[0].pageX - 30);
-		// console.log(e.targetTouches[0].pageY - 30);
-
-		console.log(e.originalEvent.changedTouches[0].pageX);
-		console.log(e.originalEvent.changedTouches[0].pageY);
-
-		//console.log(e);
-
-		// debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
-	});*/
-
-
-	//Socket stuff to send to server
-
-	// console.log(Math.round(e.changedTouches[0].pageX));
-
-	controllers.socket.emit("touchtap", {
-
-
-
-		// "x": Math.round(e.changedTouches[0].pageX),
-		// "y": Math.round(e.changedTouches[0].pageY),
-		// "tap": tapNum
-	});
-
 }
 
 
 controllers.pair = function($scope, Socket, User) {
-
-	//delete controllers.extract();
-
-	//Start pair
-
-	//Wave form matching!
-	//window.removeEventListener("devicemotion", );
-
 
 	console.log("Pairing Mode");
 	$('input#sync-input').unbind();
@@ -316,8 +228,6 @@ controllers.pair = function($scope, Socket, User) {
 		console.log("INPUT CHANGE");
 		checkInputValue();
 	});
-	//$("#nested_container").switchClass("extract", "pairing", 1000, "easeInOutQuad");
-	//$("#nested_container").switchClass("extract", "pairing");
 
 	if ($("#nested_container").hasClass("extract") == true) {
 		$("#nested_container").removeClass("extract");
@@ -325,11 +235,7 @@ controllers.pair = function($scope, Socket, User) {
 		console.log("done");
 	}
 
-	//Socket.emit("HELLO_PAIR", {"d":1})
-
 	var tmpBack = document.getElementById("nested_container");
-
-	//tmpBack.style.background = "#ff0";
 
 	controllers.socket.emit("pair", {
 		// "x": Math.round(e.changedTouches[0].pageX),
@@ -363,6 +269,10 @@ controllers.nature = function($scope, Socket, User) {
 			console.log("PAIR SUCCESS " + data);
 			$("#sync-input").hide();
 			$("#pairnow").text("PAIR SUCCESS");
+
+			//Send them back to extract
+			controllers.extract($scope, Socket, User);
+
 		});
 		controllers.socketBound = true;
 	}
@@ -371,19 +281,6 @@ controllers.nature = function($scope, Socket, User) {
 	$scope.occupation = User.data.occupation;
 
 	console.log($(document).width());
-
-	//Only need to define this once. I should get it earlier maybe?
-	// document.getElementById("planet").style.height = $(document).width() - 120;
-	// document.getElementById("planet").style.width = $(document).width() - 120;
-
-	// document.getElementById("planet2").style.height = $(document).width() - 120;
-	// document.getElementById("planet2").style.width = $(document).width() - 120;
-
-	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
-	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;
-
-	// $(".planet").style.height = $(document).width() - 120;
-	// $(".planet").style.width = $(document).width() - 120;
 
 	$("#ready").click(function() {
 		console.log("this");
@@ -394,82 +291,8 @@ controllers.nature = function($scope, Socket, User) {
 }
 
 
-
-
-//(Rev 1.0 of Tap)
-
-controllers.taptest = function($scope, Socket, User) {
-
-	window.addEventListener("devicemotion", onMotionEvent, true);
-
-	var percent = document.getElementById("percent");
-	var debug = document.getElementById("debug");
-	var block = document.getElementById("touchblock");
-	var fuel = document.getElementById("gauge");
-	var mvgAvg = null;
-	var tapNum = 0;
-
-
-	// Frontend Work
-
-	function onMotionEvent(event) {
-
-		var z = event.accelerationIncludingGravity.z;
-
-		event.preventDefault();
-
-		mvgAvg = (z * 0.4) + (mvgAvg * (1 - 0.4));
-
-		if ((Math.abs(mvgAvg - z)) > 6) {
-			console.log("tap");
-			tapNum++
-			fuel.style.height = $(document).height() * (tapNum / 100) + "px"
-			console.log(tapNum);
-			percent.innerHTML = $(document).height() * (tapNum / 100) + "px"
-
-		} else if (tapNum > 100) {
-			tapNum = 0;
-		} else {
-
-		}
-	}
-
-
-	//Frontend Touch Events
-
-	document.body.addEventListener('touchstart', function(e) {
-
-		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
-
-		block.style.left = e.changedTouches[0].pageX - 30;
-		block.style.top = e.changedTouches[0].pageY - 30;
-
-	}, false)
-
-	block.addEventListener("touchmove", function(e) {
-
-		block.style.left = e.changedTouches[0].pageX - 30;
-		block.style.top = e.changedTouches[0].pageY - 30;
-
-		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
-
-	}, false);
-
-
-	//Socket stuff to send to server
-
-	// console.log(Math.round(e.changedTouches[0].pageX));
-
-	Socket.emit("touchtap", {
-		// "x": Math.round(e.changedTouches[0].pageX),
-		// "y": Math.round(e.changedTouches[0].pageY),
-		// "tap": tapNum
-	});
-}
-
-
 controllers.diagnosticsout = function(Socket) {
-	// window.addEventListener("devicemotion", onMotionEvent, true);
+
 	window.addEventListener("deviceorientation", onOrientaionEvent, true);
 
 	// setInterval(randomData, 100);

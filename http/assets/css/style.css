@@ -2,7 +2,11 @@ body, html {
   padding: 0;
   margin: 0;
   overflow: none;
-  background-color: #333;
+  background: -webkit-radial-gradient(#333, #eee);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
   font-family: 'Inconsolata'; }
 
 h1, h2, h3, h4, h5, h6, a, p {
@@ -60,7 +64,7 @@ h1, h2, h3, h4, h5, h6, a, p {
   margin: 0 auto;
   padding-top: 0;
   overflow: visible;
-  background-color: #eee; }
+  background-color: transparent; }
 
 #nested_container {
   position: relative;
@@ -184,21 +188,25 @@ h1, h2, h3, h4, h5, h6, a, p {
   	margin: 0 auto;
 }*/
 #lobby {
-  background: -webkit-radial-gradient(#eee, #333);
   height: 100vh;
   text-align: center;
-  color: #eee; }
+  color: #eee;
+  font-weight: 100; }
   #lobby a {
     text-decoration: none; }
   #lobby h2 {
     width: 100%;
-    margin: 1em 0;
+    margin: 0.5em 0;
     text-align: center; }
   #lobby #openStmt {
     height: 100%;
     height: 100vh; }
   #lobby #planet {
-    background-color: #33f; }
+    background-color: #337;
+    margin-top: 2em;
+    width: 50%;
+    padding-bottom: 50%;
+    border-width: 0px; }
     #lobby #planet h3 {
       color: #eee;
       text-decoration: none;
@@ -208,39 +216,44 @@ h1, h2, h3, h4, h5, h6, a, p {
       font-weight: 100;
       position: absolute;
       left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0; }
+      right: 0; }
   #lobby #planet2 {
-    background-color: #f33; }
+    width: 50%;
+    padding-bottom: 50%;
+    border-width: 0px;
+    background-color: #733; }
     #lobby #planet2 h3 {
       color: #eee;
       text-decoration: none;
       margin-top: 2em;
       letter-spacing: 0.4em;
       text-transform: uppercase;
-      font-weight: 100; }
+      font-weight: 100;
+      position: absolute;
+      left: 0;
+      right: 0; }
 
 #planet {
   border: solid 1px;
   border-radius: 100%;
   width: 80%;
   padding-bottom: 80%;
-  margin: 0 auto; }
+  margin: 0 auto;
+  transition: transform 1s; }
 
 #planet2 {
   border: solid 1px;
   border-radius: 100%;
   width: 80%;
   padding-bottom: 80%;
-  margin: 0 auto; }
+  margin: 0 auto;
+  transition: transform 1s; }
 
 #main_container {
-  background-color: #f0f;
   overflow: hidden; }
 
 #nested_container {
-  background-color: #666; }
+  background-color: transparent; }
 
 #modal {
   display: none; }
@@ -263,28 +276,34 @@ h1, h2, h3, h4, h5, h6, a, p {
 
 #gauge {
   width: 100%;
-  background-color: #d9c055;
+  background-color: rgba(200, 200, 200, 0.6);
   overflow: hidden;
   position: absolute;
   top: 0px;
-  text-align: center;
-  box-shadow: 0 20px 20px #d9c055; }
+  text-align: center; }
   #gauge #percent {
     position: absolute;
     width: 100%;
     text-align: center;
-    bottom: 0; }
+    bottom: 0;
+    font-size: 3em; }
 
 .nature {
-  color: #3f3; }
+  color: fff; }
   .nature #planet {
-    border-color: #3f3; }
+    border-color: #0f0; }
 
 .human {
   color: #333; }
   .human #planet {
-    border-color: #333; }
+    border-color: #000; }
 
+.intro #pairnow {
+  display: none; }
+.intro input {
+  display: none; }
+.intro #touchdot {
+  display: none; }
 .intro #planet {
   transform: scale(1, 1); }
 .intro #planet2 {
@@ -294,10 +313,17 @@ h1, h2, h3, h4, h5, h6, a, p {
   top: -300px;
   opacity: 0; }
 .intro #lower {
-  display: block; }
+  display: block;
+  text-align: center; }
 .intro #planet2 {
   opacity: 0; }
 
+.extract #pairnow {
+  display: none; }
+.extract input {
+  display: none; }
+.extract #touchdot {
+  display: block; }
 .extract #planet {
   transform: scale(1.6, 1.6) translateY(55%); }
 .extract #upper {
@@ -309,25 +335,40 @@ h1, h2, h3, h4, h5, h6, a, p {
 .extract #planet2 {
   opacity: 0; }
 
-.mars {
-  background: -webkit-linear-gradient(#d9c055, #d6704b); }
-  .mars #planet {
-    background-color: #d6704b; }
+.mars #planet {
+  background-color: rgba(255, 100, 100, 0.5); }
 
-.earth {
-  background: -webkit-linear-gradient(#3f3, #33f); }
-  .earth #planet {
-    background-color: #d6704b; }
+.earth #planet {
+  background-color: rgba(100, 100, 255, 0.5); }
+.earth #planet2 {
+  background-color: rgba(100, 100, 255, 0.5); }
 
-.pairing #upper {
-  display: none; }
-.pairing #lower {
+#touchdot {
+  background-color: transparent;
+  border-radius: 100%;
+  border: solid 2px #333;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%; }
+
+.pairing #pairnow {
+  display: block; }
+.pairing input {
+  display: block;
+  height: 3em;
+  width: 100%;
+  text-align: center;
+  background-color: transparent; }
+.pairing #touchdot, .pairing #upper, .pairing #lower {
   display: none; }
 .pairing #planet {
   transform: translateY(10%);
   background-color: transparent; }
 .pairing #planet2 {
   opacity: 1;
+  background-color: transparent;
   transform: translateY(-35%); }
   .pairing #planet2 h3 {
     margin-top: 15%; }
