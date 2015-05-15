@@ -2,7 +2,8 @@ var factories = {};
 
 factories.Socket = function($rootScope, $location) {
 
-	var socket = io.connect("http://localhost:8080");
+
+	var socket = io.connect("http://192.168.0.105:8080");
 
 	return {
 		on: function(eventName, callback) {
@@ -47,6 +48,9 @@ factories.User = function($cookies, $location, Socket) {
 		data: {
 			planet: null,
 			occupation: null,
+			x: null,
+			y: null,
+			percent: 0,
 			checkForCookies: function() {
 				factory.data.planet = $cookies.planet;
 				factory.data.occupation = $cookies.occupation;
@@ -68,6 +72,15 @@ factories.User = function($cookies, $location, Socket) {
 				factory.data.occupation = data;
 				$location.path("/" + factory.data.planet + "/" + data);
 			},
+			setPosition: function(x, y) {
+				factory.data.x = x;
+				factory.data.y = y;
+				console.log("setting position");
+				console.log(x, y)
+			},
+			setPosition: function(percent) {
+				factory.data.percent = percent;
+			}
 		}
 
 

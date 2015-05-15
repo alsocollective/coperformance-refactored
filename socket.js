@@ -103,16 +103,16 @@ var websocket = {
 
 						console.log("received 'syncpair' with code " + code);
 
-						if (code in socketCodes) {
+						if (code in websocket.socketCodes) {
 							var sockt = socket; //websocket.io.sockets.sockets[socket.id];
 							console.log("FOUND CODE '" + code + "' IN LIST ");
-							socketCodes[code][1] = sockt;
+							websocket.socketCodes[code][1] = sockt;
 
 							//console.log(" SOCKET CODES ");
 							//console.log(socketCodes);
 
-							socketCodes[code][0].emit("pairsuccess", "1");
-							socketCodes[code][1].emit("pairsuccess", "2");
+							websocket.socketCodes[code][0].emit("pairsuccess", "1");
+							websocket.socketCodes[code][1].emit("pairsuccess", "2");
 							websocket.tcp.send.pairing();
 
 						}
@@ -126,11 +126,26 @@ var websocket = {
 				//New Emit for TouchTap
 				socket.on('touchtap', function(data) {
 					console.log(data);
-					data = {
-						"data": data,
-						"id": socket.id
+					var planet = 0,
+						location = {
+							"x": data.x,
+							"y": data.y
+						},
+						occupation = 0
+
+					if (data.planet == "earth") {
+						planet = 1
 					}
-					websocket.io.emit('touchtap', data);
+					if (data.occupation == "nature") {
+						occupation = 1
+					}
+					websocket.tcp.send.planet(planet, location, data.percent, occupation)
+					// console.log(data);
+					// data = {
+					// 	"data": data,
+					// 	"id": socket.id
+					// }
+					// websocket.io.emit('touchtap', data);
 				})
 			});
 		}

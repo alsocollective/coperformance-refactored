@@ -21,7 +21,7 @@ var copofermance = angular.module("copofermance", ['ngRoute', 'ngCookies', 'ngAn
 				templateUrl: "pages/co_occupation.html"
 			})
 			.when("/mars/nature", {
-				controller: "nature",
+				controller: "human",
 				templateUrl: "pages/co_occupation.html"
 			})
 
@@ -36,7 +36,7 @@ var copofermance = angular.module("copofermance", ['ngRoute', 'ngCookies', 'ngAn
 				templateUrl: "pages/co_occupation.html"
 			})
 			.when("/earth/nature", {
-				controller: "nature",
+				controller: "human",
 				templateUrl: "pages/co_occupation.html"
 			})
 

@@ -19,6 +19,7 @@ controllers.home = function($scope, Socket, User) {
 	$scope.tcpSendRandom = function() {
 		Socket.emit('sendRandom', {})
 	}
+
 }
 
 
@@ -43,11 +44,11 @@ controllers.lobby = function($scope, Socket, User, $location) {
 	$scope.occupation = User.data.occupation;
 
 	//Only need to define this once. I should get it earlier maybe?
-	document.getElementById("planet").style.height = $(document).width() - 200;
-	document.getElementById("planet").style.width = $(document).width() - 200;
+	//document.getElementById("planet").style.height = $(document).width() - 200;
+	//document.getElementById("planet").style.width = $(document).width() - 200;
 
-	document.getElementById("planet2").style.height = $(document).width() - 200;
-	document.getElementById("planet2").style.width = $(document).width() - 200;
+	//document.getElementById("planet2").style.height = $(document).width() - 200;
+	//document.getElementById("planet2").style.width = $(document).width() - 200;
 
 	$scope.setPlanet = function() {
 		console.log($scope.planet);
@@ -86,17 +87,47 @@ controllers.planet = function($scope, Socket, User) {
 // User Actions
 
 controllers.human = function($scope, Socket, User) {
+	console.log("human")
+	console.log(controllers.socketBound);
+	if (controllers.socketBound === undefined) {
+		console.log("setting up socket!")
+		controllers.socket = Socket;
+		controllers.syncCode = "";
+		controllers.socket.on("sync", function(data) {
+			controllers.syncCode = data;
+			console.log(" RECEIVED SYNC CODE  " + controllers.syncCode);
+			$("#pairnow").text("Pair Now \n " + controllers.syncCode);
+		});
+		controllers.socket.on("pairsuccess", function(data) {
+			console.log("PAIR SUCCESS " + data);
+			$("#sync-input").hide();
+			$("#pairnow").text("PAIR SUCCESS");
+		});
+		controllers.socketBound = true;
+	}
+
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 
 	console.log($(document).width());
+	console.log(document.getElementById("planet"));
+
+	//setTimeout(function() {
+	var docSize = $(document).width();
+
+	console.log("DOC SIZE " + docSize);
+
+
+	$("#planet").height(docSize);
+	$("#planet").width(docSize);
+	//}, 0)
 
 	//Only need to define this once. I should get it earlier maybe?
-	document.getElementById("planet").style.height = $(document).width() - 120;
-	document.getElementById("planet").style.width = $(document).width() - 120;
+	//document.getElementById("planet").style.height = ($(document).width() - 120) + "px";
+	//document.getElementById("planet").style.width = ($(document).width() - 120) + "px";
 
-	document.getElementById("planet2").style.height = $(document).width() - 120;
-	document.getElementById("planet2").style.width = $(document).width() - 120;
+	//document.getElementById("planet2").style.height = $(document).width() - 120;
+	//document.getElementById("planet2").style.width = $(document).width() - 120;
 
 	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
 	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;
@@ -107,9 +138,8 @@ controllers.human = function($scope, Socket, User) {
 	$("#ready").click(function() {
 		console.log("this");
 
-		controllers.extract();
+		controllers.extract($scope, Socket, User);
 	});
-
 }
 
 controllers.extract = function($scope, Socket, User) {
@@ -117,6 +147,8 @@ controllers.extract = function($scope, Socket, User) {
 	// delete controllers.pair();
 
 	console.log("Extract Mode");
+
+	//Bind events here first once only...
 
 	if ($("#nested_container").hasClass("intro") == true) {
 		$("#nested_container").removeClass("intro");
@@ -135,13 +167,10 @@ controllers.extract = function($scope, Socket, User) {
 
 	var percent = document.getElementById("percent");
 	var debug = document.getElementById("debug");
-	var block = document.getElementById("touchblock");
+	//var block = document.getElementById("touchblock");
 	var fuel = document.getElementById("gauge");
 	var mvgAvg = null;
 	var tapNum = 0;
-
-
-
 
 
 	// Frontend Work
@@ -155,24 +184,42 @@ controllers.extract = function($scope, Socket, User) {
 		mvgAvg = (z * 0.4) + (mvgAvg * (1 - 0.4));
 
 		if ((Math.abs(mvgAvg - z)) > 6) {
-			console.log("tap");
+			//console.log("tap");
 			tapNum++
-			fuel.style.height = $(document).height() * (tapNum / 100) + "px"
-			console.log(tapNum);
-			percent.innerHTML = $(document).height() * (tapNum / 100) + "%"
+			fuel.style.height = $(document).height() * (tapNum / 100) + "px";
+			//console.log(tapNum);
+			percent.innerHTML = (tapNum / $(document).height()) * 100 + "%";
 
+			fuel.style.height = (tapNum / $(document).height()) * 100 + "px";
+
+			console.log(tapNum);
+			console.log($(document).height() * (tapNum / 100) + "px");
+			console.log($(document).height());
+			console.log((tapNum / $(document).height()) * 100);
+
+		} else if (tapNum != User.data.percent && tapNum % 10 == 0) {
+			User.data.setPosition(tapNum);
+			Socket.emit("touchtap", {
+				"planet": User.data.planet,
+				"occupation": User.data.occupation,
+				"x": Math.floor(User.data.x),
+				"y": Math.floor(User.data.y),
+				"percent": tapNum
+			});
 		} else if (tapNum > 100) {
 			tapNum = 0;
 			removeEvent();
-			controllers.pair();
+			controllers.pair($scope, Socket, User);
 		} else {
 
 		}
 	}
 
+	$("#pair").unbind(); //Maybe run this once upon init.
+
 	$("#pair").click(function() {
 		removeEvent();
-		controllers.pair();
+		controllers.pair($scope, Socket, User);
 	});
 
 	function removeEvent() {
@@ -183,34 +230,54 @@ controllers.extract = function($scope, Socket, User) {
 
 	//Frontend Touch Events
 
-	/*document.body.addEventListener('touchstart', function(e) {
+	// This is within the controllers namespace.
 
-		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+	$(window).bind('touchstart', function(e) {
 
-		block.style.left = e.changedTouches[0].pageX - 30;
-		block.style.top = e.changedTouches[0].pageY - 30;
+		e.preventDefault();
 
-	}, false)
+		//debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
 
-	block.addEventListener("touchmove", function(e) {
+		User.data.setPosition(e.originalEvent.changedTouches[0].pageX, e.originalEvent.changedTouches[0].pageY);
 
-		block.style.left = e.changedTouches[0].pageX - 30;
-		block.style.top = e.changedTouches[0].pageY - 30;
+		$(window).unbind("touchstart");
 
-		debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
 
-	}, false);*/
+
+		//console.log(e);
+	});
+
+	/*$(window).bind("touchmove", function(e) {
+
+		e.preventDefault();
+
+		// block.style.left = e.changedTouches[0].pageX - 30;
+		// block.style.top = e.changedTouches[0].pageY - 30;
+
+		// console.log(e.targetTouches[0].pageX - 30);
+		// console.log(e.targetTouches[0].pageY - 30);
+
+		console.log(e.originalEvent.changedTouches[0].pageX);
+		console.log(e.originalEvent.changedTouches[0].pageY);
+
+		//console.log(e);
+
+		// debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
+	});*/
 
 
 	//Socket stuff to send to server
 
 	// console.log(Math.round(e.changedTouches[0].pageX));
 
-	// Socket.emit("touchtap", {
-	// 	// "x": Math.round(e.changedTouches[0].pageX),
-	// 	// "y": Math.round(e.changedTouches[0].pageY),
-	// 	// "tap": tapNum
-	// });
+	controllers.socket.emit("touchtap", {
+
+
+
+		// "x": Math.round(e.changedTouches[0].pageX),
+		// "y": Math.round(e.changedTouches[0].pageY),
+		// "tap": tapNum
+	});
 
 }
 
@@ -226,7 +293,7 @@ controllers.pair = function($scope, Socket, User) {
 
 
 	console.log("Pairing Mode");
-
+	$('input#sync-input').unbind();
 	$("#sync-input").show();
 	$("#sync-input").val("");
 	$('input#sync-input').change(function(event) {
@@ -254,17 +321,10 @@ controllers.pair = function($scope, Socket, User) {
 		// "tap": tapNum
 	});
 
+	$("#pairnow").unbind();
 
 	$("#pairnow").click(function() {
-
-		//$("#nested_container").switchClass("pairing", "extract");
-		delete controllers.pair();
-
-		controllers.extract();
-
-		//console.log("Time to Pair Andrei");
-		// removeEvent();
-		// controllers.pair();
+		controllers.extract($scope, Socket, User);
 	});
 }
 
@@ -273,8 +333,9 @@ controllers.pair = function($scope, Socket, User) {
 //This object is potentially redundant
 
 controllers.nature = function($scope, Socket, User) {
-
-	if (controllers.socketBount) {
+	console.log("nature");
+	if (controllers.socketBound) {
+		console.log("setting up socket!")
 		controllers.socket = Socket;
 		controllers.syncCode = "";
 		controllers.socket.on("sync", function(data) {
@@ -287,7 +348,7 @@ controllers.nature = function($scope, Socket, User) {
 			$("#sync-input").hide();
 			$("#pairnow").text("PAIR SUCCESS");
 		});
-		controllers.socketBount = true;
+		controllers.socketBound = true;
 	}
 
 	$scope.planet = User.data.planet;
@@ -311,7 +372,7 @@ controllers.nature = function($scope, Socket, User) {
 	$("#ready").click(function() {
 		console.log("this");
 
-		controllers.extract();
+		controllers.extract($scope, Socket, User);
 	});
 
 }
