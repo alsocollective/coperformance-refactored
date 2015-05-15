@@ -61,7 +61,7 @@ var tcp = {
 			tcp.socket.write(str + "\n");
 		},
 
-		planet: function(planet, location, percent) {
+		planet: function(planet, location, percent, occupation) {
 			if (!tcp.socket) {
 				console.log("no app.socket")
 				return false;
@@ -71,12 +71,13 @@ var tcp = {
 				planet: planet,
 				x: location.x,
 				y: location.y,
-				percent: percent
+				percent: percent,
+				occupation: occupation
 			})
 			tcp.socket.write(str + "\n");
 		},
 
-		pairing: function(planet, location) {
+		pairing: function(planet, location, occupation) {
 			if (!tcp.socket) {
 				console.log("no app.socket")
 				return false;

@@ -37,10 +37,10 @@ var websocket = {
 					socket.id = id[1];
 				}
 
-				socket.on('joinPlanet', function(data) {
-					console.log(data);
-					// var occupation = websocket.game.planets.mars.allList.add(, socket);
-
+				socket.on('joinPlanet', function(data, responce) {
+					var job = websocket.game.planets[data.planet].allList.add(socket.id);
+					console.log(job);
+					socket.emit("makeOccupation", job)
 				});
 
 				socket.on('planet', function(data) {
@@ -126,11 +126,26 @@ var websocket = {
 				//New Emit for TouchTap
 				socket.on('touchtap', function(data) {
 					console.log(data);
-					data = {
-						"data": data,
-						"id": socket.id
+					var planet = 0,
+						location = {
+							"x": data.x,
+							"y": data.y
+						},
+						occupation = 0
+
+					if (data.planet == "earth") {
+						planet = 1
 					}
-					websocket.io.emit('touchtap', data);
+					if (data.occupation == "nature") {
+						occupation = 1
+					}
+					websocket.tcp.send.planet(planet, location, data.percent, occupation)
+					// console.log(data);
+					// data = {
+					// 	"data": data,
+					// 	"id": socket.id
+					// }
+					// websocket.io.emit('touchtap', data);
 				})
 			});
 		}

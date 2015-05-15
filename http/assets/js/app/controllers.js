@@ -20,36 +20,6 @@ controllers.home = function($scope, Socket, User) {
 		Socket.emit('sendRandom', {})
 	}
 
-	controllers.socket = Socket;
-
-	controllers.syncCode = "";
-
-	controllers.socket.on("sync", function(data) {
-
-		controllers.syncCode = data;
-
-		console.log(" RECEIVED SYNC CODE  " + controllers.syncCode);
-
-		$("#pairnow").text("Pair Now \n " + controllers.syncCode);
-
-		//$("#pairnow").parent().append("");
-
-	});
-
-	controllers.socket.on("pairsuccess", function(data) {
-
-
-		console.log("PAIR SUCCESS " + data);
-
-
-		$("#sync-input").hide();
-		$("#pairnow").text("PAIR SUCCESS");
-		//console.log(data); 
-
-	});
-
-
-
 }
 
 
@@ -69,16 +39,24 @@ function checkInputValue() {
 
 };
 
-controllers.lobby = function($scope, Socket, User) {
+controllers.lobby = function($scope, Socket, User, $location) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 
 	//Only need to define this once. I should get it earlier maybe?
-	// document.getElementById("planet").style.height = $(document).width() - 200;
-	// document.getElementById("planet").style.width = $(document).width() - 200;
+	// <<<<<<< HEAD
+	// 	// document.getElementById("planet").style.height = $(document).width() - 200;
+	// 	// document.getElementById("planet").style.width = $(document).width() - 200;
 
-	// document.getElementById("planet2").style.height = $(document).width() - 200;
-	// document.getElementById("planet2").style.width = $(document).width() - 200;
+	// 	// document.getElementById("planet2").style.height = $(document).width() - 200;
+	// 	// document.getElementById("planet2").style.width = $(document).width() - 200;
+	// =======
+	// 	//document.getElementById("planet").style.height = $(document).width() - 200;
+	// 	//document.getElementById("planet").style.width = $(document).width() - 200;
+
+	// 	//document.getElementById("planet2").style.height = $(document).width() - 200;
+	// 	//document.getElementById("planet2").style.width = $(document).width() - 200;
+	// >>>>>>> 7ea0802f013099e136fa807af0a71402e76b6a05
 
 	$scope.setPlanet = function() {
 		console.log($scope.planet);
@@ -96,6 +74,9 @@ controllers.lobby = function($scope, Socket, User) {
 		User.data.setOccupation($scope.occupation);
 	}
 
+	Socket.on("makeOccupation", function(msg) {
+		User.data.setOccupation(msg);
+	})
 }
 
 controllers.planet = function($scope, Socket, User) {
@@ -107,23 +88,62 @@ controllers.planet = function($scope, Socket, User) {
 	$scope.clickOccupation = function(occupation) {
 		User.data.setOccupation(occupation);
 	}
+
 }
 
 
 // User Actions
 
 controllers.human = function($scope, Socket, User) {
+	console.log("human")
+	console.log(controllers.socketBound);
+	if (controllers.socketBound === undefined) {
+		console.log("setting up socket!")
+		controllers.socket = Socket;
+		controllers.syncCode = "";
+		controllers.socket.on("sync", function(data) {
+			controllers.syncCode = data;
+			console.log(" RECEIVED SYNC CODE  " + controllers.syncCode);
+			$("#pairnow").text("Pair Now \n " + controllers.syncCode);
+		});
+		controllers.socket.on("pairsuccess", function(data) {
+			console.log("PAIR SUCCESS " + data);
+			$("#sync-input").hide();
+			$("#pairnow").text("PAIR SUCCESS");
+		});
+		controllers.socketBound = true;
+	}
+
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 
 	console.log($(document).width());
+	console.log(document.getElementById("planet"));
+
+	//setTimeout(function() {
+	var docSize = $(document).width();
+
+	console.log("DOC SIZE " + docSize);
+
+
+	$("#planet").height(docSize);
+	$("#planet").width(docSize);
+	//}, 0)
 
 	//Only need to define this once. I should get it earlier maybe?
-	// document.getElementById("planet").style.height = $(document).width() - 120;
-	// document.getElementById("planet").style.width = $(document).width() - 120;
+	// <<<<<<< HEAD
+	// 	// document.getElementById("planet").style.height = $(document).width() - 120;
+	// 	// document.getElementById("planet").style.width = $(document).width() - 120;
 
-	// document.getElementById("planet2").style.height = $(document).width() - 120;
-	// document.getElementById("planet2").style.width = $(document).width() - 120;
+	// 	// document.getElementById("planet2").style.height = $(document).width() - 120;
+	// 	// document.getElementById("planet2").style.width = $(document).width() - 120;
+	// =======
+	// 	//document.getElementById("planet").style.height = ($(document).width() - 120) + "px";
+	// 	//document.getElementById("planet").style.width = ($(document).width() - 120) + "px";
+
+	// 	//document.getElementById("planet2").style.height = $(document).width() - 120;
+	// 	//document.getElementById("planet2").style.width = $(document).width() - 120;
+	// >>>>>>> 7ea0802f013099e136fa807af0a71402e76b6a05
 
 	// document.getElementsByClassName("spheres").style.height = $(document).width() - 120;
 	// document.getElementsByClassName("spheres").style.width = $(document).width() - 120;
@@ -134,9 +154,8 @@ controllers.human = function($scope, Socket, User) {
 	$("#ready").click(function() {
 		console.log("this");
 
-		controllers.extract();
+		controllers.extract($scope, Socket, User);
 	});
-
 }
 
 controllers.extract = function($scope, Socket, User) {
@@ -194,12 +213,19 @@ controllers.extract = function($scope, Socket, User) {
 			console.log($(document).height());
 			console.log((tapNum / $(document).height()) * 100);
 
-
-
+		} else if (tapNum != User.data.percent && tapNum % 10 == 0) {
+			User.data.setPosition(tapNum);
+			Socket.emit("touchtap", {
+				"planet": User.data.planet,
+				"occupation": User.data.occupation,
+				"x": Math.floor(User.data.x),
+				"y": Math.floor(User.data.y),
+				"percent": tapNum
+			});
 		} else if (tapNum > 100) {
 			tapNum = 0;
 			removeEvent();
-			controllers.pair();
+			controllers.pair($scope, Socket, User);
 		} else {
 
 		}
@@ -209,7 +235,7 @@ controllers.extract = function($scope, Socket, User) {
 
 	$("#pair").click(function() {
 		removeEvent();
-		controllers.pair();
+		controllers.pair($scope, Socket, User);
 	});
 
 	function removeEvent() {
@@ -221,8 +247,6 @@ controllers.extract = function($scope, Socket, User) {
 	//Frontend Touch Events
 
 	// This is within the controllers namespace.
-	controllers.planetX = 0;
-	controllers.planetY = 0;
 
 	$(window).bind('touchstart', function(e) {
 
@@ -230,8 +254,7 @@ controllers.extract = function($scope, Socket, User) {
 
 		//debug.innerHTML = "Debug:" + Math.round(e.changedTouches[0].pageX) + "<b> : x</b><br>" + Math.round(e.changedTouches[0].pageY) + "<b> : y</b>";
 
-		console.log(e.originalEvent.changedTouches[0].pageX);
-		console.log(e.originalEvent.changedTouches[0].pageY);
+		User.data.setPosition(e.originalEvent.changedTouches[0].pageX, e.originalEvent.changedTouches[0].pageY);
 
 		$(window).unbind("touchstart");
 
@@ -317,7 +340,7 @@ controllers.pair = function($scope, Socket, User) {
 	$("#pairnow").unbind();
 
 	$("#pairnow").click(function() {
-		controllers.extract();
+		controllers.extract($scope, Socket, User);
 	});
 }
 
@@ -326,6 +349,24 @@ controllers.pair = function($scope, Socket, User) {
 //This object is potentially redundant
 
 controllers.nature = function($scope, Socket, User) {
+	console.log("nature");
+	if (controllers.socketBound) {
+		console.log("setting up socket!")
+		controllers.socket = Socket;
+		controllers.syncCode = "";
+		controllers.socket.on("sync", function(data) {
+			controllers.syncCode = data;
+			console.log(" RECEIVED SYNC CODE  " + controllers.syncCode);
+			$("#pairnow").text("Pair Now \n " + controllers.syncCode);
+		});
+		controllers.socket.on("pairsuccess", function(data) {
+			console.log("PAIR SUCCESS " + data);
+			$("#sync-input").hide();
+			$("#pairnow").text("PAIR SUCCESS");
+		});
+		controllers.socketBound = true;
+	}
+
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 
@@ -347,7 +388,7 @@ controllers.nature = function($scope, Socket, User) {
 	$("#ready").click(function() {
 		console.log("this");
 
-		controllers.extract();
+		controllers.extract($scope, Socket, User);
 	});
 
 }

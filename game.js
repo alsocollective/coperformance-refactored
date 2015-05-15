@@ -66,14 +66,15 @@ var game = {
 
 			},
 			add: function(cookie) {
-				if (this.list.nature.count() < this.list.human.count()) {
+				var h = this.list.nature.count(),
+					n = this.list.human.count();
+				if (n < h) {
 					this.list.human.addUser(cookie);
+					return "human";
 				} else {
 					this.list.nature.addUser(cookie);
+					return "nature";
 				}
-				// add to lower one
-
-				// allList.list =
 			},
 			count: function() {
 				return this.list.human.count() + this.list.nature.count();
