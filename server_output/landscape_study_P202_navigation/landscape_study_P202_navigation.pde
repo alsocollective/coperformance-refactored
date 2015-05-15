@@ -18,8 +18,8 @@ PImage[] images = new PImage[2];
 float digPosX, digPosY;
 float digRadius = 50, digDepth;
 // ------ crater ------
-int craterCount = 10, craterCounter = 0;
-float minCraterRadius = 200, maxCraterRadius = 500, minCraterDepth = 200, maxCraterDepth = 1800;
+int craterCount = 2000, craterCounter = 0;
+float minCraterRadius = 2000, maxCraterRadius = 500, minCraterDepth = 200, maxCraterDepth = 1800;
 crater[] craters = new crater[craterCount];
 // ------ terrain grid ------
 grid_vertex[] gridVertex = new grid_vertex[tileCount*tileCount];
@@ -31,7 +31,8 @@ unit[] units = new unit[unitAmount];
 building buildings;
 // ------ wave grid ------
 wave flood;
-float seaLevel, waveAlpha;
+int waveNoiseRange = 5;
+float seaLevel, waveAlpha, waveAmp = 200, waveSpeed = .01;
 // ------ noise ------
 int noiseXRange = 10;
 int noiseRange = 10;
@@ -184,9 +185,9 @@ void draw() {
   noLights();
 
   planet_mars.update();
-  //planet_mars.draw();
+  planet_mars.draw();
   
-  for (int i = 0; i < 1; i++){
+  for (int i = 0; i < unitCounter-1; i++){
     units[i].draw();
   }
   
@@ -200,12 +201,13 @@ void draw() {
   //if (shaderEnabled == true) shader(ocean);
   flood.update();
   flood.draw();
+
   
   //resetShader();
   //noLights();
   //lights();
-  //buildings.update();
-  //buildings.draw();
+  buildings.update();
+  buildings.draw();
   
   // draw GUI
   resetShader();
@@ -213,5 +215,8 @@ void draw() {
   hint(DISABLE_DEPTH_TEST);
   noLights();
   drawGUI();
+  
+  //String stringtofloat = "15559}"; 
+  //println(float(stringtofloat));
 }
 

@@ -55,7 +55,7 @@ class building {
               float amount = map(gridVertex[(j+1) * tileCount + i].pos.z, threshold, noiseYMax, 0, 1);
               interColor = lerpColor(midColor, topColor, amount);
             }
-            fill(55,150);
+            
             pushMatrix();
             translate(gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale);
             noStroke();
@@ -64,8 +64,10 @@ class building {
             //drawBuilding(scaleStep*5,gridVertex[j * tileCount + i].pos.z*zScale*2);
             pushMatrix();
             //float tempRandomness=
-            if (gridVertex[(j+1) * tileCount + i].randomness < 0.3)
+            if (gridVertex[(j+1) * tileCount + i].randomness < 0.3){
+              fill(155 * (gridVertex[(j+1) * tileCount + i].randomness),200);
               box(scaleStep*5,scaleStep*5,gridVertex[j * tileCount + i].pos.z*zScale*(2+gridVertex[(j+1) * tileCount + i].randomness));
+            }
             popMatrix();
             popMatrix();
           }

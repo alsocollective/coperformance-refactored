@@ -15,18 +15,37 @@ void setupGUI(){
   ctrl.setColorLabel(color(255));
   ctrl.close();
 
-  sliders = new Slider[17];
+  sliders = new Slider[25];
   ranges = new Range[10];
+  Textlabel planetLabel;
+  Textlabel oceanLabel;
+  
    
 
   int left = 0;
   int top = 5;
   int len = 300;
+  int right = width - len - 100;
 
   int si = 0;
   int ri = 0;
-  int posY = 0;
+  int posY = 0, rightPosY = 0;
+  
+  planetLabel = controlP5.addTextlabel("label")
+                    .setText("Planet")
+                    .setPosition(left,top + posY)
+                    .setColorValue(color(50))
+                    .setFont(createFont("Georgia",14))
+                    ;
+                    
+  oceanLabel = controlP5.addTextlabel("label")
+                    .setText("Ocean")
+                    .setPosition(right,top + rightPosY)
+                    .setColorValue(color(50))
+                    .setFont(createFont("Georgia",14))
+                    ;
 
+  posY += 30;
   sliders[si++] = controlP5.addSlider("activeSpineAmount",1,50,left,top+posY+0,len,15);
   posY += 30;
 
@@ -44,6 +63,30 @@ void setupGUI(){
   sliders[si++] = controlP5.addSlider("travelSpeed",0.001,100,left,top+posY+100,len,15);
   posY += 130;
   
+  // parameters for ocean
+  rightPosY += 30;
+  sliders[si++] = controlP5.addSlider("activeSpineAmount",1,50,right,top+rightPosY+0,len,15);
+  rightPosY += 30;
+
+  sliders[si++] = controlP5.addSlider("octaves",0,10,right,top+rightPosY+0,len,15);
+  //sliders[si++] = controlP5.addSlider("jointStepSize",0,100,right,top+rightPosY+20,len,15);
+  sliders[si++] = controlP5.addSlider("waveNoiseRange",0,100,right,top+rightPosY+20,len,15);
+  rightPosY += 50;
+
+  sliders[si++] = controlP5.addSlider("tileCount",10,255,right,top+rightPosY+0,len,15);
+  sliders[si++] = controlP5.addSlider("scaleStep",1,125,right,top+rightPosY+20,len,15);
+  //sliders[si++] = controlP5.addSlider("agentWidth",0,5,left,top+rightPosY+40,len,15);
+  //sliders[si++] = controlP5.addSlider("activeJointAmount",1,125,left,top+rightPosY+60,len,15);
+  sliders[si++] = controlP5.addSlider("waveAmp",10,1000,right,top+rightPosY+60,len,15);
+  sliders[si++] = controlP5.addSlider("falloff",0,1,right,top+rightPosY+80,len,15);
+  sliders[si++] = controlP5.addSlider("waveSpeed",0.001,0.1,right,top+rightPosY+100,len,15);
+  
+  rightPosY += 130;
+  sliders[si++] = controlP5.addSlider("seaLevel",0,255,right,top+rightPosY+20,len,15);
+  sliders[si++] = controlP5.addSlider("waveAlpha",0,255,right,top+rightPosY+40,len,15);
+  // end
+  
+  
   //ranges[ri++] = controlP5.addRange("trailLengthRange",0,300,minCount,maxCount,left,top+posY+0,len,15);
   //ranges[ri++] = controlP5.addRange("agentSpeedRange",0,30,speedMin,speedMax,left,top+posY+20,len,15);
   posY += 30;
@@ -51,8 +94,6 @@ void setupGUI(){
   posY += 20;
   
   sliders[si++] = controlP5.addSlider("fogWhiteness",0,255,left,top+posY+0,len,15);
-  sliders[si++] = controlP5.addSlider("seaLevel",0,255,left,top+posY+20,len,15);
-  sliders[si++] = controlP5.addSlider("waveAlpha",0,255,left,top+posY+40,len,15);
   sliders[si++] = controlP5.addSlider("cam_scale",0.1,5,left,top+posY+60,len,15);
   sliders[si++] = controlP5.addSlider("curve_amp",0.01,PI,left,top+posY+80,len,15);
   sliders[si++] = controlP5.addSlider("planet_radius",5000,15000,left,top+posY+100,len,15);
@@ -67,6 +108,9 @@ void setupGUI(){
          .setArrayValue(new float[] {50, 50})
          //.disableCrosshair()
          ;
+
+  planetLabel.setGroup(ctrl);  
+  oceanLabel.setGroup(ctrl); 
 
   for (int i = 0; i < si; i++) {
     sliders[i].setGroup(ctrl);

@@ -2,16 +2,16 @@ class wave {
   grid_vertex[] gridVertex;
   int tileCount;
   PVector core;
-  float radius, angleSpan;
+  float radius, angleSpan, zScale;
   //float seaLevel;
   
   // ------ noise ------
   int noiseXRange = 10;
-  //int noiseRange = 10;
+  int noiseRange = 10;
   //int octaves = 4;
   //float falloff = 0.5;
   float waveNoiseSeed;
-  float tideSpeed = 0.01;
+  float tideSpeed = waveSpeed;
   
   boolean waveOn;
   color midColor, topColor, bottomColor;
@@ -20,6 +20,7 @@ class wave {
     tileCount = n;
     waveOn = true;
     
+    zScale = waveAmp;
     radius = 5000;
     core = new PVector(0,0,-radius);
       
@@ -39,9 +40,11 @@ class wave {
   }
   
   void update() {
+    zScale = waveAmp;
     angleSpan = curve_amp;
+    noiseRange = waveNoiseRange;
     
-    if (waveOn) waveNoiseSeed -= tideSpeed;
+    if (waveOn) waveNoiseSeed -= waveSpeed;
     
     
     for (int j = 0; j < tileCount; j++) {
