@@ -104,6 +104,7 @@ var websocket = {
 						console.log("received 'syncpair' with code " + code);
 
 						if (code in websocket.socketCodes) {
+							//TODO some how send the data of the users to the tcp
 							var sockt = socket; //websocket.io.sockets.sockets[socket.id];
 							console.log("FOUND CODE '" + code + "' IN LIST ");
 							websocket.socketCodes[code][1] = sockt;
@@ -113,7 +114,7 @@ var websocket = {
 
 							websocket.socketCodes[code][0].emit("pairsuccess", "1");
 							websocket.socketCodes[code][1].emit("pairsuccess", "2");
-							websocket.tcp.send.pairing();
+							// websocket.tcp.send.pairing(planet, location, occupation);
 
 						}
 
