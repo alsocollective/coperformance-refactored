@@ -4,7 +4,6 @@ factories.Socket = function($rootScope, $location) {
 
 	var socket = io.connect("http://localhost:8080");
 
-
 	return {
 		on: function(eventName, callback) {
 			socket.on(eventName, function(msg) {
@@ -67,6 +66,7 @@ factories.User = function($cookies, $location, Socket) {
 			setOccupation: function(data) {
 				$cookies.occupation = data;
 				factory.data.occupation = data;
+				$location.path("/" + factory.data.planet + "/" + data);
 			},
 		}
 

@@ -38,7 +38,9 @@ var websocket = {
 				}
 
 				socket.on('joinPlanet', function(data, responce) {
-					websocket.game.planets[data.planet].allList.add(socket.id, responce);
+					var job = websocket.game.planets[data.planet].allList.add(socket.id);
+					console.log(job);
+					socket.emit("makeOccupation", job)
 				});
 
 				socket.on('planet', function(data) {

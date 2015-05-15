@@ -19,40 +19,6 @@ controllers.home = function($scope, Socket, User) {
 	$scope.tcpSendRandom = function() {
 		Socket.emit('sendRandom', {})
 	}
-
-	controllers.socket = Socket;
-
-	controllers.syncCode = "";
-
-	controllers.socket.on("sync", function(data) {
-
-
-
-
-		controllers.syncCode = data;
-
-		console.log(" RECEIVED SYNC CODE  " + controllers.syncCode);
-
-		$("#pairnow").text("Pair Now \n " + controllers.syncCode);
-
-		//$("#pairnow").parent().append("");
-
-	});
-
-	controllers.socket.on("pairsuccess", function(data) {
-
-
-		console.log("PAIR SUCCESS " + data);
-
-
-		$("#sync-input").hide();
-		$("#pairnow").text("PAIR SUCCESS");
-		//console.log(data); 
-
-	});
-
-
-
 }
 
 
@@ -72,7 +38,7 @@ function checkInputValue() {
 
 };
 
-controllers.lobby = function($scope, Socket, User) {
+controllers.lobby = function($scope, Socket, User, $location) {
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 
@@ -99,6 +65,9 @@ controllers.lobby = function($scope, Socket, User) {
 		User.data.setOccupation($scope.occupation);
 	}
 
+	Socket.on("makeOccupation", function(msg) {
+		User.data.setOccupation(msg);
+	})
 }
 
 controllers.planet = function($scope, Socket, User) {
@@ -110,9 +79,7 @@ controllers.planet = function($scope, Socket, User) {
 	$scope.clickOccupation = function(occupation) {
 		User.data.setOccupation(occupation);
 	}
-	Socket.on("makeOccupation", function(msg) {
-		console.log(msg);
-	})
+
 }
 
 
@@ -306,6 +273,23 @@ controllers.pair = function($scope, Socket, User) {
 //This object is potentially redundant
 
 controllers.nature = function($scope, Socket, User) {
+
+	if (controllers.socketBount) {
+		controllers.socket = Socket;
+		controllers.syncCode = "";
+		controllers.socket.on("sync", function(data) {
+			controllers.syncCode = data;
+			console.log(" RECEIVED SYNC CODE  " + controllers.syncCode);
+			$("#pairnow").text("Pair Now \n " + controllers.syncCode);
+		});
+		controllers.socket.on("pairsuccess", function(data) {
+			console.log("PAIR SUCCESS " + data);
+			$("#sync-input").hide();
+			$("#pairnow").text("PAIR SUCCESS");
+		});
+		controllers.socketBount = true;
+	}
+
 	$scope.planet = User.data.planet;
 	$scope.occupation = User.data.occupation;
 

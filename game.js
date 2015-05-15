@@ -65,25 +65,16 @@ var game = {
 			remove: function(cookie) {
 
 			},
-			add: function(cookie, socket) {
-				if (this.list.nature.count() < this.list.human.count()) {
+			add: function(cookie) {
+				var h = this.list.nature.count(),
+					n = this.list.human.count();
+				if (n < h) {
 					this.list.human.addUser(cookie);
-					if (socket) {
-						console.log("human")
-						socket("makeOccupation", {
-							"occupation": "human"
-						});
-					}
+					return "human";
 				} else {
 					this.list.nature.addUser(cookie);
-					if (socket) {
-						console.log("nature")
-						socket("makeOccupation", {
-							"occupation": "nature"
-						});
-					}
+					return "nature";
 				}
-				console.log(this.list.nature.list())
 			},
 			count: function() {
 				return this.list.human.count() + this.list.nature.count();
