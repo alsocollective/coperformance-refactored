@@ -36,16 +36,22 @@ copofermance.diagnostics = {
 		copofermance.diagnostics.settings.datasets[0] = [];
 		copofermance.diagnostics.settings.datasets[1] = [];
 
-		for (var a = 0; a < 120; ++a) {
+		for (var a = 0; a < 60; ++a) {
 			var dp = {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 0,
+				"uag": "",
+				"device": "",
+				"hardware": ""
 			};
 			copofermance.diagnostics.settings.data.push({
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 0,
+				"uag": "",
+				"device": "",
+				"hardware": ""
 			})
 
 			copofermance.diagnostics.settings.datasets[0].push(dp);
@@ -217,6 +223,8 @@ copofermance.diagnostics = {
 				"pz": pathz
 			};
 		}
+
+
 	},
 	datain: function(msg) {
 		if (typeof copofermance.diagnostics.settings.datasets[0][0] != typeof msg) {
@@ -232,11 +240,11 @@ copofermance.diagnostics = {
 			copofermance.diagnostics.settings.devices.shift();
 
 
-		console.log(copofermance.diagnostics.settings.devices);
+		//console.log(copofermance.diagnostics.settings.devices);
 
 		var dex = copofermance.diagnostics.settings.devices.indexOf(msg.id);
-		console.log(msg.id);
-		console.log("DEX " + dex);
+		//console.log(msg.id);
+		//console.log("DEX " + dex);
 		msg = msg.data;
 		//add your filter here
 		var filter = msg;
@@ -247,12 +255,26 @@ copofermance.diagnostics = {
 		copofermance.diagnostics.settings.datasets[dex].push(filter);
 
 		//update the graph...
+		//console.log(msg);
+		console.log(copofermance.diagnostics.settings.datasets[0][0].uag)
+		//console.log("X1 " + copofermance.diagnostics.settings.datasets[0][0].x);
+		//console.log("X2 " + copofermance.diagnostics.settings.datasets[1][0].x);
+		//console.log("Diff " + copofermance.diagnostics.diffVal(copofermance.diagnostics.settings.datasets[0][0].x, copofermance.diagnostics.settings.datasets[1][0].x));
+
 		copofermance.diagnostics.settings.paths[dex].px
 			.attr("d", copofermance.diagnostics.settings.lines[dex].lx)
 		copofermance.diagnostics.settings.paths[dex].py
 			.attr("d", copofermance.diagnostics.settings.lines[dex].ly)
 		copofermance.diagnostics.settings.paths[dex].pz
 			.attr("d", copofermance.diagnostics.settings.lines[dex].lz)
+
+		$("#uagent1").html(copofermance.diagnostics.settings.datasets[0][0].uag);
+		$("#deviceInfo1").html(copofermance.diagnostics.settings.datasets[0][0].device);
+		$("#hard1").html(copofermance.diagnostics.settings.datasets[0][0].hardware);
+
+		$("#uagent2").html(copofermance.diagnostics.settings.datasets[1][0].uag);
+		$("#deviceInfo2").html(copofermance.diagnostics.settings.datasets[1][0].device);
+		$("#hard2").html(copofermance.diagnostics.settings.datasets[1][0].hardware);
 
 		//remove the old
 		copofermance.diagnostics.settings.datasets[dex].shift();
@@ -264,6 +286,12 @@ copofermance.diagnostics = {
 		Socket.onunbind("diagdata");
 	},
 
+	diffVal: function(a, b) {
+
+		difference = a - b;
+
+		return difference;
+	},
 
 
 	createDiagnosticButton: function(Socket) {
@@ -276,7 +304,8 @@ copofermance.diagnostics = {
 			Socket.emit("diagdata", event.timeStamp);
 		}
 		$(button).click(senddata);
-	},
+	}
+	/*,
 
 
 	addTiltEventListener: function(Socket) {
@@ -295,12 +324,13 @@ copofermance.diagnostics = {
 					"x": x,
 					"y": y,
 					"z": z,
-					"id": Socket.id
+					"id": Socket.id,
+					"tst": "test"
 				});
 				copofermance.diagnostics.settings.lastEvent = Date.now();
 			}
 		}
 		window.addEventListener("devicemotion", copofermance.diagnostics.settings.tiltEvent, true);
-	}
+	}*/
 
 }

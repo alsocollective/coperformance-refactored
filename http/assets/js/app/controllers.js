@@ -28,10 +28,23 @@ controllers.home = function(Socket) {
 			return false;
 		}
 		previous = now;
+
+		//Vibration
+		//navigator.vibrate([500, 250, 500]);
+
+
+
+		var uag = navigator.userAgent;
+		var deviceInfo = navigator.appCodeName + "  |  " + navigator.appName + "  |  " + navigator.appVersion + "  |  " + navigator.cookieEnabled + "  |  " + navigator.language + "  |  " + navigator.onLine + "  |  " + navigator.platform;
+		var hard = screen.width + "  |  " + screen.height + "  |  " + screen.pixelDepth + "  |  " + screen.availHeight + "  |  " + screen.availWidth + "  |  " + screen.colorDepth;
+
 		socket.emit("diagdatain", {
 			"x": event.accelerationIncludingGravity.x,
 			"y": event.accelerationIncludingGravity.y,
-			"z": event.accelerationIncludingGravity.z
+			"z": event.accelerationIncludingGravity.z,
+			"uag": uag,
+			"device": deviceInfo,
+			"hardware": hard,
 		})
 	}
 }
