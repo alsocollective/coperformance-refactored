@@ -8,7 +8,7 @@ copofermance.diagnostics = {
 		lines: [],
 		paths: [],
 		lastEvent: 0,
-		width: $(document).width() - 60,
+		width: $(document).width() / 2 - 60,
 		height: 300,
 		yscale: null,
 		xscale: null,
@@ -43,7 +43,12 @@ copofermance.diagnostics = {
 				"z": 0,
 				"uag": "",
 				"device": "",
-				"hardware": ""
+				"hardware": "",
+				"support": "",
+				"gamma": "",
+				"beta": "",
+				"alpha": ""
+
 			};
 			copofermance.diagnostics.settings.data.push({
 				"x": 0,
@@ -51,7 +56,12 @@ copofermance.diagnostics = {
 				"z": 0,
 				"uag": "",
 				"device": "",
-				"hardware": ""
+				"hardware": "",
+				"support": "",
+				"gamma": "",
+				"beta": "",
+				"alpha": ""
+
 			})
 
 			copofermance.diagnostics.settings.datasets[0].push(dp);
@@ -187,7 +197,7 @@ copofermance.diagnostics = {
 				.attr("class", "line")
 				.attr("d", copofermance.diagnostics.settings.lines[i].lx)
 				.attr("fill", "none")
-				.attr("stroke-width", 4)
+				.attr("stroke-width", 2)
 				.attr("stroke", xCol[i]);
 
 			copofermance.diagnostics.settings.pathx = pathx;
@@ -199,7 +209,7 @@ copofermance.diagnostics = {
 				.attr("class", "line")
 				.attr("d", copofermance.diagnostics.settings.lines[i].ly)
 				.attr("fill", "none")
-				.attr("stroke-width", 4)
+				.attr("stroke-width", 2)
 				.attr("stroke", yCol[i]);
 
 			copofermance.diagnostics.settings.pathy = pathy;
@@ -212,7 +222,7 @@ copofermance.diagnostics = {
 				.attr("class", "line")
 				.attr("d", copofermance.diagnostics.settings.lines[i].lz)
 				.attr("fill", "none")
-				.attr("stroke-width", 4)
+				.attr("stroke-width", 2)
 				.attr("stroke", zCol[i]);
 
 			copofermance.diagnostics.settings.pathz = pathz;
@@ -256,8 +266,10 @@ copofermance.diagnostics = {
 
 		//update the graph...
 		//console.log(msg);
-		console.log(copofermance.diagnostics.settings.datasets[0][0].uag)
+		//console.log(copofermance.diagnostics.settings.datasets[0][0].uag)
 		//console.log("X1 " + copofermance.diagnostics.settings.datasets[0][0].x);
+
+		//$("#device").style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
 		//console.log("X2 " + copofermance.diagnostics.settings.datasets[1][0].x);
 		//console.log("Diff " + copofermance.diagnostics.diffVal(copofermance.diagnostics.settings.datasets[0][0].x, copofermance.diagnostics.settings.datasets[1][0].x));
 
@@ -272,9 +284,32 @@ copofermance.diagnostics = {
 		$("#deviceInfo1").html(copofermance.diagnostics.settings.datasets[0][0].device);
 		$("#hard1").html(copofermance.diagnostics.settings.datasets[0][0].hardware);
 
+		if (copofermance.diagnostics.settings.datasets[0][0].gamma == null || copofermance.diagnostics.settings.datasets[0][0].gamma == "") {
+			console.log("not");
+
+		} else {
+			console.log("wait");
+			console.log(copofermance.diagnostics.settings.datasets[0][0].gamma);
+			//$("#device").style.webkitTransform = "rotate(" + copofermance.diagnostics.settings.datasets[0][0].gamma + "deg) rotate3d(1,0,0, " + (copofermance.diagnostics.settings.datasets[0][0].beta * -1) + "deg)";
+		}
+
+		//$("#device").style.webkitTransform = "rotate(" + copofermance.diagnostics.settings.datasets[1][0].gamma + "deg) rotate3d(1,0,0, " + (copofermance.diagnostics.settings.datasets[1][0].beta * -1) + "deg)";
+		//console.log($("#device"));
+		//console.log(copofermance.diagnostics.settings.datasets[0][0].gamma);
+		//console.log(copofermance.diagnostics.settings.datasets[1][0].gamma);
+
 		$("#uagent2").html(copofermance.diagnostics.settings.datasets[1][0].uag);
 		$("#deviceInfo2").html(copofermance.diagnostics.settings.datasets[1][0].device);
 		$("#hard2").html(copofermance.diagnostics.settings.datasets[1][0].hardware);
+
+		//console.log(copofermance.diagnostics.settings.datasets[1][0].support);
+
+
+		// logo.style.webkitTransform =
+		// 	"rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+		// logo.style.MozTransform = "rotate(" + tiltLR + "deg)";
+		// logo.style.transform =
+		// 	"rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
 
 		//remove the old
 		copofermance.diagnostics.settings.datasets[dex].shift();
