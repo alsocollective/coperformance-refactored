@@ -46,7 +46,7 @@ class terrain {
         gridVertex[j * tileCount + i].pos.y = radius * sin(PI/2 - angleSpan/2 + i * angleSpan / tileCount) * cos(PI/2 - angleSpan/2 + j * angleSpan / tileCount);
         //gridVertex[j * tileCount + i].id = j * tileCount + i;
         gridVertex[j * tileCount + i].pos.z = core.z + (radius + noise(noiseX, noiseY)*zScale)* sin(PI/2 - angleSpan/2 + i * angleSpan / tileCount) * sin(PI/2 - angleSpan/2 + j * angleSpan / tileCount);
-        gridVertex[j * tileCount + i].draw();
+        //gridVertex[j * tileCount + i].draw();
       }
     }
   }
@@ -78,7 +78,7 @@ class terrain {
             //fill(200 * (1- gridVertex[j * tileCount + i].digScale / digDepth,50,0);
             //vertex (gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z*zScale - gridVertex[j * tileCount + i].digScale+ curve_amp * sin(PI*((float)i/(float)tileCount)));   
             //vertex (gridVertex[(j+1) * tileCount + i].pos.x, gridVertex[(j+1) * tileCount + i].pos.y, gridVertex[(j+1) * tileCount + i].pos.z*zScale - gridVertex[(j+1) * tileCount + i].digScale + curve_amp * sin(PI*((float)i/(float)tileCount)));
-            //fill(55);
+            fill(55);
             vertex (gridVertex[j * tileCount + i].pos.x, gridVertex[j * tileCount + i].pos.y, gridVertex[j * tileCount + i].pos.z);   
             vertex (gridVertex[(j+1) * tileCount + i].pos.x, gridVertex[(j+1) * tileCount + i].pos.y, gridVertex[(j+1) * tileCount + i].pos.z);
           }

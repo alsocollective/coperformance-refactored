@@ -24,7 +24,8 @@ void keyPressed() {
 }
 
 void keyReleased() {    
-  if (key == 'p' || key == 'P') saveFrame("####.png");
+  if (key == 'p' || key == 'P') saveFrame("planetLarge/planet####.png");
+  if (key == 'g' || key == 'G') shaderEnabled = !shaderEnabled;
   //if (key == 'p' || key == 'P') tiler.init(timestamp()+".png", qualityFactor);
   if (key == 'l' || key == 'L') showStroke = !showStroke;
   if (key == 't' || key == 'T') landFill = !landFill;

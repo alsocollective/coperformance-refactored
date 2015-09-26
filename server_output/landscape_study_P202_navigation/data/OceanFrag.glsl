@@ -13,5 +13,16 @@ void main() {
 
   color = vec4(0.4, 0.4, 0.6, 0.5);
 
+  if (intensity > 0.95) {
+    color = vec4(0.8, 0.8, 0.8, 1.0);
+  } else if (intensity > 0.5) {
+    color = vec4(0.4, 0.4, 0.6, 1.0);
+  } else if (intensity > 0.25) {
+    color = vec4(0.4, 0.4, 0.6, 0.7);
+  } else {
+    color = vec4(0.4, 0.4, 0.6, 0.5);
+    //color = vec4(0.0, 0.0, 0.0, 1.0);
+  }
+
   gl_FragColor = color;  
 }

@@ -15,7 +15,7 @@ void setupGUI(){
   ctrl.setColorLabel(color(255));
   ctrl.close();
 
-  sliders = new Slider[25];
+  sliders = new Slider[28];
   ranges = new Range[10];
   Textlabel planetLabel;
   Textlabel oceanLabel;
@@ -62,7 +62,10 @@ void setupGUI(){
   sliders[si++] = controlP5.addSlider("falloff",0,1,left,top+posY+80,len,15);
   sliders[si++] = controlP5.addSlider("travelSpeed",0.001,100,left,top+posY+100,len,15);
   posY += 130;
-  
+  sliders[si++] = controlP5.addSlider("buildingDensity",0.001,1,left,top+posY,len,15);
+  sliders[si++] = controlP5.addSlider("buildingBrightness",0,255,left,top+posY + 20,len,15);
+  sliders[si++] = controlP5.addSlider("buildingOpacity",0,255,left,top+posY + 40,len,15);
+  posY += 50;
   // parameters for ocean
   rightPosY += 30;
   sliders[si++] = controlP5.addSlider("activeSpineAmount",1,50,right,top+rightPosY+0,len,15);

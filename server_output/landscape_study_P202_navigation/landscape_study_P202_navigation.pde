@@ -29,6 +29,7 @@ int unitAmount = 200, unitCounter = 0;
 unit[] units = new unit[unitAmount];
 // ------ city grid ------
 building buildings;
+float buildingDensity = 0.1, buildingBrightness = 50, buildingOpacity = 150;
 // ------ wave grid ------
 wave flood;
 int waveNoiseRange = 5;
@@ -50,7 +51,7 @@ boolean showStroke = true, landFill = true;
 //------ fog ------
 //Fog fog;
 PShader mars, ocean, fogColor;
-boolean shaderEnabled = false;  
+boolean shaderEnabled = true;  
 boolean showFog = true;
 float fogWhiteness = 225, fogClearness = 5000;
 
@@ -112,7 +113,6 @@ void setup() {
 
 void draw() {
   //TCP message
-  
   if (myClient.available() > 0) { 
     byte[] byteBuffer = new byte[2048];
     int byteCount = myClient.readBytesUntil('\n', byteBuffer); 
@@ -141,17 +141,17 @@ void draw() {
   }
   
   hint(ENABLE_DEPTH_TEST);
-  //if (shaderEnabled == true) 
-  //shader(mars);
+  if (shaderEnabled == true) 
+    shader(mars);
   
   //shader(fogColor); 
   background(fogWhiteness);
   fogColor.set("fogNear", 0.0); 
   fogColor.set("fogFar", fogClearness);
+  fogColor.set("fogBrightness", fogWhiteness/255);
   
-  //if (!shaderEnabled) lights();
-  //else directionalLight(204, 204, 204, 1, 1, 11);
-  //directionalLight(2040, 2040, 2040, 1, 1, 11);
+  if (!shaderEnabled) lights();
+  else directionalLight(204, 204, 204, 1, 1, 0);
   //lightFalloff(1.0, 0.0, 0.0);
 
   // ------ set view ------
@@ -191,21 +191,23 @@ void draw() {
     units[i].draw();
   }
   
-  //resetShader();
+  resetShader();
   
   //noLights();
   //lights();
   
   //buildings.update();
   //buildings.draw();
-  //if (shaderEnabled == true) shader(ocean);
+  if (shaderEnabled == true) shader(ocean);
+  directionalLight(204, 204, 204, 1, 1, 0);
   flood.update();
   flood.draw();
 
   
-  //resetShader();
-  //noLights();
-  //lights();
+  resetShader();
+  shader(fogColor); 
+  noLights();
+
   buildings.update();
   buildings.draw();
   
